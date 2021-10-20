@@ -6,11 +6,36 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage[framemethod=TikZ]{mdframed}
+
+\newenvironment{sidenote}
+{
+	\begin{center}
+		\begin{mdframed}[backgroundcolor=BurntOrange, roundcorner=10pt, linewidth= 0pt]
+		}
+		{
+		\end{mdframed}
+	\end{center}
+}
+
 \author{Estelle Severs, Maarten Magits}
 \title{Studentencursus TMI}
 \begin{document}
 	\maketitle
+	\section{Introductie}
+	Toepassingen van de informatica (TMI) wordt ook wel Computationele geometrie (CG) genoemd.
+	In het algemeen handelt dit domein over het berekenen en manipuleren van geometrische entiteiten/vormen en een oplossing te vinden voor geometrische problemen.
+	Er vallen twee subdomeinen te onderscheiden:
+	\begin{enumerate}
+		\item \textbf{Combinatorial CG}: De studie van concrete objecten. Behandelt de discrete ruimte.
+		\item \textbf{Numerical CG}: De studie van curves en functies. Eerder abstract.
+	\end{enumerate}
+	Dit OPO gaat grotendeels over de Combinatorial CG met slects een klein deeltje Numerical CG.
+	
 	\section{Les 1: Convex Omhullende}
+	\begin{sidenote}
+		Ontwikkelen van een algoritme
+	\end{sidenote}
 	\subsection{Brute Force algoritme}
 	\subsection{Incrementeel algoritme 	(Andrew's algorithm)}
 	\subsection{Graham's scan}
