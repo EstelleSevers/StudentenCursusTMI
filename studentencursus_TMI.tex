@@ -5,6 +5,8 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
 
 
 \author{Estelle Severs, Maarten Magits}
@@ -21,8 +23,34 @@
 	\end{enumerate}
 	Dit OPO gaat grotendeels over de Combinatorial CG met slects een klein deeltje Numerical CG. In de slides volgen hier nog wat voorbeelden op, maar je kan ook gewoon de hoofdstukken beginnen bekijken voor goeie voorbeelden. 
 	
+	In deze cursus zullen we de volgende stappen telkens volgen voor het opmaken van een algoritme: 
+	\begin{enumerate}
+		\item Aanvankelijk negeren we de speciale gevallen. Op deze manier maken we een eerste versie van het algoritme
+		\item Nu passen we ons algoritme aan op de speciale gevallen. Dit kan met (domme) if-then-else testen zullen we eerder vermijden. We willen het algoritme zo aanpassen zodat de speciale gevallen gewoon opgelost geraken. 
+		\item Dan zal je het effectieve algoritme implementeren!
+	\end{enumerate}
+	
 	\section{Les 1: Convex Omhullende}
+	Het deeltje over convex omhullende begint met wat basis definities over wat dit eigenlijk is. Er is daarna ook een figuur om het volledig duidelijk te maken. 
+		\begin{description}
+			\item[Convexe verzameling] Een vorm (shape) of verzameling (set) is convex indien voor elk paar punten die tot de verzameling behoren, het lijnsegment dat beide punten verbindt ook behoort tot die verzameling. 
+			\item[Convex omhullende] Voor een deelverzameling van het vlak, is de convex omhullende de kleinst mogelijke convexe vorm die de hele deelverzameling bevat. 
+		\end{description}
+	Om je een idee te geven van het belang van zo een convex omhullende, geven we ook wat applicaties. Daarna zullen we ingaan op de algoritmes om ze te bepalen. 
+		\begin{itemize}
+			\item Als een verzameling punten staat voor een aantal obstakels, zal een robotarm het pad 	errond kiezen volgens de convex omhullende. 
+			\item We kunnen bij het detecteren of twee figuren overlappen, de convex omhullende berekenen en dan zien of deze vormen al overlappen. Als dat niet het geval is, zullen de vormen zelf ook niet overlappen. 
+			\item Om het puntenpaar te vinden dat het verst van elkaar gelegen is in een verzameling, is het relevant de convex omhullende te bepalen aanegzien alle punten die het verste van elkaar zitten in de verzameling ook op de convex omhullende zullen liggen. 
+		\end{itemize}
+	We gaan nu het bepalen van de convex omhullende bespreken. We gaan hier gebruik maken van een input aan punten \(P = {p_1, p_2, p_3, ..., p_n}\). De output zal de punten op de convexe veelhoek zijn geordend in klokwijzerzin. We zullen de convex omhullende noteren als $CH(P)$.
 	\subsection{Brute Force algoritme}
+	Het brute-force algoritme gaat voor elk paar aan punten nakijken of alle andere punten aan de rechterkant liggen. Als dit het geval is, is dit deel van de convexe veelhoek en wordt deze toegevoegd aan de lijst van edges E. De laatste stap zal er nog eens over de edges gegaan worden om deze in de juiste volgorde te steken. 
+		\begin{algorithm}
+			\caption{SLOWCONVEXHULP(P)}
+			\begin{algorithmic}[1]
+				\Require
+			\end{algorithmic}
+		\end{algorithm}
 	\subsection{Incrementeel algoritme 	(Andrew's algorithm)}
 	\subsection{Graham's scan}
 	\subsection{Jarvis's March}
