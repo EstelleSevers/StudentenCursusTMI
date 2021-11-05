@@ -45,10 +45,14 @@
 	We gaan nu het bepalen van de convex omhullende bespreken. We gaan hier gebruik maken van een input aan punten \(P = {p_1, p_2, p_3, ..., p_n}\). De output zal de punten op de convexe veelhoek zijn geordend in klokwijzerzin. We zullen de convex omhullende noteren als $CH(P)$.
 	\subsection{Brute Force algoritme}
 	Het brute-force algoritme gaat voor elk paar aan punten nakijken of alle andere punten aan de rechterkant liggen. Als dit het geval is, is dit deel van de convexe veelhoek en wordt deze toegevoegd aan de lijst van edges E. De laatste stap zal er nog eens over de edges gegaan worden om deze in de juiste volgorde te steken. 
+	De input is in dit geval Een set punten P in een vlak. De output is dan een list $\mathcal{L}$ met de vertices van $CH(P)$ in wijzerzin. 
 		\begin{algorithm}
 			\caption{SLOWCONVEXHULP(P)}
 			\begin{algorithmic}[1]
-				\Require
+				\State $E \gets \emptyset$
+				\For{all ordere pairs $(p,q)\in P\times P$ with p not equal to q}
+					\State \textit{valid} $\gets$ \textbf{true}
+				\EndFor
 			\end{algorithmic}
 		\end{algorithm}
 	\subsection{Incrementeel algoritme 	(Andrew's algorithm)}
