@@ -137,10 +137,71 @@
 	\end{figure}
 	%TODO verdere uitleg zoeken want hier zou mondelinge uitleg best ook bijkomen
 	
-	
+	%TODO Typische examenvragen nog op te lossen
+	\subsection{Typische examenvragen}
+	\begin{itemize}
+		\item \textbf{Leg het Graham Scan algoritme uit voor de berekening van een convex omhullende veelhoek ven een set punten:}\\
+		\item \textbf{Hoe zou je Graham's Scan en Jarvis' March met elkaar vergelijken? Wat zijn sterke en zwakke punten van beide algoritmen?:}\\
+		\item \textbf{Stel dat je een verzameling punten hebt, waarvan een deel punten  colineair zijn (ttz op dezelfde lijn liggen). Welke problemen zou je kunnen ontmoeten bij het Graham's Scan algoritme? Bij Jarvis' March?:}\\
+		\item \textbf{Stel dat je de convex omhullende wil berekenen van een set van n lijnsegmenten. Hoe zou je dit aanpakken?:}\\
+		\item \textbf{Zou je het verdeel-en-heers algoritme ook kunnen toepassen als je de verzameling punten in 4 verdeelt - bijvoorbeeld zowel via de x-mediaan als de y-mediaan? Op welke manier kan je dan 4 convex omhullende veelhoeken combineren tot 1 veelhoek?:}\\
+		\item \textbf{Bij het verdeel-en-heers algoritme kan je zowel een verdeling van de x-mediaan als volgens de y-mediaan toepassen. Op alle recursieve niveau's zou je telkens een andere beslissing kunnen nemen (verdelen volgens x of y). Van welke factoren zou deze keuze kunnen afhangen?:}\\
+		\item \textbf{In welke mate is algoritme *vul hier een convex omhullende algoritme in * bestand tegen kleine rekenfouten? Levert het algoritme telkens een gesloten veelhoek? Soms zelfs geen veelhoek? Een concave veelhoek? Wat zijn mogelijke oorzaken van dergelijke fouten?:}\\
+	\end{itemize}
+
+
 	\section{Les 2: Intersecties van lijnstukken}
+	In dit hoofdstuk worden algoritmes besproken om snijpunten tussen lijnstukken te vinden. 
 	\subsection{Brute Force algoritme}
+	Het brute force algoritme zal domweg, zoals wel verwacht, elk lijnstuk met elk ander evalueren op een snijpunt. De pseudocode ervoor is hier te vinden:
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.8\linewidth]{afbeeldingen/find-Intersections}
+		\label{fig:find-intersections}
+	\end{figure}
+	Het is duidelijk dat de tijdscomplexiteit van dit algoritme dus altijd $O(n^2)$ zal zijn en dat dit een \textit{input-afhankelijke} complexiteit heeft. Wanneer elk lijnstuk met elkaar snijdt kan dit geen kwaad, maar als geen enkel lijnstuke met een ander snijdt, zal je hier heel veel tijd mee verliezen. 
+	
+	
 	\subsection{Doorlooplijn algoritme}
+	%TODO stel u voor, ge weet ondertussen nog niet wat een doorlooplijn is
+	Een doorlooplijn is een denkbeeldige lijn die door de dataset loopt en bijhoudt welke lijnsegmenten actief zijn en dus potentieel elkaar kunnen snijden. Als twee lijnsegemnten op die lijn zitten kan het zijn dat ze elkaar snijden, als ze niet op een moment gelijktijdig op de lijn zitten, is er geen kans dat ze elkaar snijden en moeten ze dus niet geëvalueerd worden op snijpunten. Als eerste zullen de punten dus gesorteerd moeten worden op de y-as volgens de begin- en eindpunten van de lijnsegmenten. Deze zouden dan terechtkomen in een event queue om deze af te lopen en bij elk punt een actie te ondernemen. Bij een startpunt worden alle actieve lijnsegemten geëvalueerd met het nieuwe toegevoegde lijnsegmenten om snijpunten te zoeken. Zo wordt een deel van de lijnsegmenten gefilterd en is het geen bruteforce. De datastructuur voor de doorlooplijn zou in dit geval gewoon een lijst kunnen zijn aangezien deze niet gesorteerd hoeven te zijn. 
+	
+	De worst case van dit algoritme is wanneer er allemaal lijnstukken parallel verticaal naast elkaar liggen. Dan wordt elk lijnstuk met elkaar vergeleken ondanks dat we een doorlooplijn gebruiken en is het even onefficiënt als een brute force algoritme. 
+		
+	\subsection{Doorlooplijn++}
+	In de verbeterde doorlooplijn zullen we niet naar alle actieve lijnstukken kijken op de lijn, maar enkel naar de buren van het toegevoegde lijnstuk. Nu zal er dus wel een datastructuur nodig zijn om deze sortering bij te houden, dit zal het beste gaan met een gebalanceerde zoekboom. Er zijn verschillende soorten 'events' in dit algoritme, je kan van elk een voorbeeld zien in de onderstaande afbeelding.  
+	
+	\begin{figure}[h]
+		\centering
+		\subfigure[]{\includegraphics[width=0.24\textwidth]{afbeeldingen/first-doorlooplijn}} 
+		\subfigure[]{\includegraphics[width=0.24\textwidth]{afbeeldingen/second-doorlooplijn}} 
+		\subfigure[]{\includegraphics[width=0.24\textwidth]{afbeeldingen/third-doorlooplijn}}
+		\subfigure[]{\includegraphics[width=0.24\textwidth]{afbeeldingen/fourth-doorlooplijn}}
+		\label{fig:sweepline-example}
+	\end{figure}
+
+	De event queue zal in dit geval ook een gebalanceerde zoekboom zijn, het is geen priority queue aangezien er niets is dat een 'prioriteit' heeft.
+	\begin{description}
+		\item[Start event:] Een start event is wanneer een nieuw lijnstuk actief wordt op de doorlooplijn, in dat geval zal het nieuwe lijnstuk vergeleken worden met zijn buren op snijpunten. Als er snijpunten worden gevonden, worden deze toegevoegd aan de event queue. 
+		\item[intersectoin event:] Bij een snijpunt zal het algoritme de volgorde van de lijnstukken op de status queue verwisselen en deze lijnstukken zullen dan met hun nieuwe buren vergeleken worden voor nieuwe snijpunten. 
+		\item[End event:] Het einde van een lijnstuk betekent dat dit lijnstuk van de status queue gehaald moet worden en dat er moet gekeken worden of de nieuwe buren elkaar snijden. 
+	\end{description}
+
+	De pseudocode is hieronder te vinden: 
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.9\linewidth]{afbeeldingen/find-intersections++}
+		\label{fig:find-intersections++}
+	\end{figure}
+	
+	De correctheid van dit algoritme wordt als volgt bewezen: Indien twee lijnsegmenten elkaar snijden, moet er ergens een event zijn boven het intersectiepunt, waar beide lijnsegmenten elkaars buren worden.\\
+	Indien de doorlooplijn zich net boven een intersectiepunt p bevindt, zijn $s_i$ en $s_j$ aangrenzend (en worden dus getest op intersectie).\\
+	Initieel is de status leeg, er moet dus ergens een event zijn dat $s_i$ en $s_j$ aangrenzend maakt.
+	
+	Elk event is begrensd door een tijdscomplexiteit van $O(\log(n))$. De lus zal 2n + k keer uitgevoerd worden, met $n$ het aantal cirkels en $k$ het aantal snijpunten. De lus zal dus  $O(n + k)$ overlopen worden, wat een totaal geeft van $O((n+k)\log(n))$. 	
+
+
 	\subsection{Doubly-connected edge 	list}
 	\section{Les 3: }
 	\section{Les 4: }
