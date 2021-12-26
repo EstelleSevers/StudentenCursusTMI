@@ -18,7 +18,7 @@
 	%TODO Screenshots van pseudocode vervangen door effectieve pseudocode. 
 	\maketitle
 	\tableofcontents
-	\section{Introductie}
+	\section*{Introductie}
 	Toepassingen van de informatica (TMI) wordt ook wel Computationele geometrie (CG) genoemd.
 	In het algemeen handelt dit domein over het berekenen en manipuleren van geometrische entiteiten/vormen en een oplossing te vinden voor geometrische problemen.
 	Er vallen twee subdomeinen te onderscheiden:
@@ -36,7 +36,7 @@
 	\end{enumerate}
 	
 	
-	\section{Les 1: Convex Omhullende}
+	\section{Convex Omhullende}
 	Het deeltje over convex omhullende begint met wat basis definities over wat dit eigenlijk is. Er is daarna ook een figuur om het volledig duidelijk te maken. 
 		\begin{description}
 			\item[Convexe verzameling] Een vorm (shape) of verzameling (set) is convex indien voor elk paar punten die tot de verzameling behoren, het lijnsegment dat beide punten verbindt ook behoort tot die verzameling. 
@@ -150,7 +150,7 @@
 	\end{itemize}
 
 
-	\section{Les 2: Intersecties van lijnstukken}
+	\section{Intersecties van lijnstukken}
 	In dit hoofdstuk worden algoritmes besproken om snijpunten tussen lijnstukken te vinden. 
 	\subsection{Brute Force algoritme}
 	Het brute force algoritme zal domweg, zoals wel verwacht, elk lijnstuk met elk ander evalueren op een snijpunt. De pseudocode ervoor is hier te vinden:
@@ -199,17 +199,158 @@
 	Indien de doorlooplijn zich net boven een intersectiepunt p bevindt, zijn $s_i$ en $s_j$ aangrenzend (en worden dus getest op intersectie).\\
 	Initieel is de status leeg, er moet dus ergens een event zijn dat $s_i$ en $s_j$ aangrenzend maakt.
 	
-	Elk event is begrensd door een tijdscomplexiteit van $O(\log(n))$. De lus zal 2n + k keer uitgevoerd worden, met $n$ het aantal cirkels en $k$ het aantal snijpunten. De lus zal dus  $O(n + k)$ overlopen worden, wat een totaal geeft van $O((n+k)\log(n))$. 	
+	Elk event is begrensd door een tijdscomplexiteit van $O(\log(n))$. De lus zal 2n + k keer uitgevoerd worden, met $n$ het aantal cirkels en $k$ het aantal snijpunten. De lus zal dus  $O(n + k)$ overlopen worden, wat een totaal geeft van $O((n+k)\log(n))$. Qua geheugen zal de status vast zijn door het maximaal aantal elementen dat er op de lijn tevoorschijn kan komen, wat dus $O(n)$ is. De event queue zal begrensd zijn door $2n + k$ events, wat in het ergste geval kan uitkomen op $O(n^2)$. 
+	
+	Een speciaal geval kan twee punten zijn die dezelfde y-waarde hebben, dan kan de event queue het niet juist sorteren. Dit kan opgelost worden door de doorlooplijn zogezegd wat schijner te laten lopen. Een ander probleem is het samenvallen van events (het einde van een lijnstuk is gelijk aan het begin van een ander lijnstuk.) Hier moeten dan tijdens het implementeren bepaalde keuzes gemaakt worden, maar dit kan ook opgelost worden. %TODO moet hier nog iets bij? 
 
 
-	\subsection{Doubly-connected edge 	list}
-	\section{Les 3: }
-	\section{Les 4: }
-	\section{Les 5: }
-	\section{Les 6: }
-	\section{Les 7: }
-	\section{Les 8: }
-	\section{Les 9: }
-	\section{Les 10: }
-	\section{Les 11: }
+	\subsection{Doubly-connected edge list}
+	Een DCEL is een manier om een oppervlak met lijnen in een datastructuur te steken en zo gemakkelijk over de datastructuur kunnen verplaatsen. Eerst volgen wat termen die belangrijk zijn om te kunnen praten over deze DCEL. 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{afbeeldingen/DCEL-termen}
+		\label{fig:dcel-termen}
+	\end{figure}
+
+	Het centrale idee is dat elke edge uit bovenstaande afbeelding kan gemaakt worden uit 2 'half-edges'. Deze half edges hebben elk een oorsprong-vertex, een twin (de andere half edge), een incidentface (face aan de linkerkant van de half-edge), een next en een prev. Elke vertex bestaat uit coördinaten en een incidentEdge (de edge startende in de vertex). 
+	
+	Met deze datastructuur kunnen we gemakkelijker de overlay van twee vlakverdelingen bepalen. Dit is eignelijk aanvankelijk het construeren van een DCEL uit twee DCEL's, wat door een doorloopalgoritme zal gebeuren. Ook hier werken we met events: 
+	\begin{itemize}
+		\item Een vertex van S1
+		\item Een vertex van S2
+		\item Een intersectiepunt van een edge van S1 met een edge van S2. 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{afbeeldingen/intersection-DCEL}
+			\label{fig:intersection-dcel}
+		\end{figure}
+		\item De edge van S1 snijdt met een vertex van S2 (of omgekeerd)
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{afbeeldingen/DCEL-vertex&edge}
+			\label{fig:dcel-vertexedge}
+		\end{figure}
+		\item Samenvallende vertices van S1 en S2
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{afbeeldingen/DCEL-vertices}
+			\label{fig:dcel-vertices}
+		\end{figure}
+	\end{itemize}
+
+	Om de faces te bepalen, zal de nieuwe DCEL overlopen moeten worden om alle loops te detecteren en de inwendige en uitwendige grenzen te bepalen. Een face moet dan geconstrueerd worden voor elke uitwendige grens (+ het buitengebied). Van de inwendige grenzen kunnen we het meest links punt bepalen (van de vorm) en zodra een andere edge is gevonden, wordt deze vorm overlopen. Dit is dan de vorm waarbinnen de aanvankelijke vorm ligt. Dan kan een structuur zoals hieronder gemaakt worden. Deze indelingen zijn gemakkelijk om booleaanse opdrachten te gebruiken op veelhoeken.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{afbeeldingen/DCEL-faces}
+		\label{fig:dcel-faces}
+	\end{figure}
+	
+	Voor de tijdscomplexiteit is de volgende afbeelding het bewijs (cuz ja, ik ben effe lui):
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{afbeeldingen/DCEL-bewijs}
+		\label{fig:dcel-bewijs}
+	\end{figure}
+	
+	
+	\subsection{Typische examenvragen}
+	\begin{itemize}
+		\item \textbf{Wat is de algemene idee van sweep-line algoritmen?:}\\
+		\item \textbf{Beschrijf het algoritme om alle intersectiepunten in een verzameling lijnstukken te vinden. Bespreek ook de tijdscomplexiteit:}\\
+		\item \textbf{Bespreek de Double-Connected-Edge-List als datatstructuur. Wat zijn voor- en nadelen van deze datastructuur?:}\\
+		\item \textbf{Bespreek welke operaties er precies moeten gebeuren bij de afhandeling van <event van type X> bij het berekenen van de overlay van 2 vlakindelingen:}\\
+	\end{itemize}
+	
+	
+	\section{Triangulaties van veelhoeken}
+	Dit deel begint met een klein voorbeeld als context. Stel dat je in een museum werkt en moet besluiten waar de bewakers 's nachts zullen staan. Je wilt natuurlijk zo min mogelijk (stilstaande) bewakers voor de ruimte die je moet bewaken. Dit wordt het \textit{Museumprobleem} genoemd. Bij deze probleemstelling komen dan ook de vraag: Wat is het minimaal aantal bewakers dat nodig is voor een n-hoek? 
+	
+	\subsection{Typische examenvragen}
+	\begin{itemize}
+		\item \textbf{Bewijs dat een oplossing voor het “museumprobleem” of “art gallery problem” voor een (eenvoudige) veelhoek met n hoeken een bovengrens heeft gelijk aan  n/3 (naar beneden afgerond) bewakers:}\\
+		\item \textbf{Stel dat we een klasse (eenvoudige) veelhoeken hebben, met als eigenschap dat ze d.m.v. niet-snijdende diagonalen in de veelhoek steeds kunnen opgesplitst worden in een verzameling convexe vierhoeken. Welke uitspraken kan je doen i.v.m. het “museumprobleem” of “art gallery problem” voor deze klasse van veelhoeken?:}\\
+		\item \textbf{Bewijs dat elke eenvoudige veelhoek met n hoekpunten kan getrianguleerd worden in n-2 driehoeken. Geef duidelijk alle stappen in de redenering:}\\
+		\item \textbf{Op welke manier kunnen we een veelhoek splitsen in een aantal monotone veelhoeken?:}\\
+		\item \textbf{In het globale algoritme om een veelhoek te trianguleren splitsen we eerst de veelhoek op in y-monotone veelhoeken. Maakt het een verschil voor de finale triangulatie als we zouden splitsen in x-monotone driehoeken?:}\\
+	\end{itemize}
+	
+	
+	\section{Lineaire programming \& gerandomiseerde algoritmen}
+	
+	
+	
+	\section{Orthogonal Range searching, Kd-bomen}
+	\subsection{Typische examenvragen}
+	\begin{itemize}
+		\item \textbf{Wat is een kd-boom? Leg uit:}\\
+		\item \textbf{Wat is de tijdscomplexiteit voor het opzoeken van alle punten binnen een (gegeven) 2D-interval in een tweedimensionale kd-boom?:}\\
+		\item \textbf{Leg de idee uit van Range Trees:}\\
+	\end{itemize}
+	
+	
+	\section{Puntlocatie}
+	\subsection{Typische examenvragen}
+	\begin{itemize}
+		\item \textbf{Leg de pincipes uit van een trapezium-map:}\\
+		\item \textbf{Leg het algoritme uit om een lijnsegment toe te voegen aan een bestaande trapezium-map:}\\
+		\item \textbf{Op welke manieren kunnen we nagaan of een punt behoort tot het inwendige van een veelhoek?:}\\
+	\end{itemize}
+	
+	
+	\section{Voronoi Diagramma's}
+	\subsection{Typische examenvragen}
+	\begin{itemize}
+		\item \textbf{Wat is het verband tussen het Voronoidiagramma van een verzameling punten, en de Delaunay triangulatie?:}\\
+		\item \textbf{Leg het sweep-line algoritme van Fortune uit om een Voronoidiagramma te construeren:}\\
+		\item \textbf{Bewijs eigenschap X van Voronoi-diagramma's. Welk belang heeft deze eigenschap voor de algoritmische constructie van Voronoi-diagramma's?:}\\
+		\item \textbf{De Voronoi-veelhoek behorend bij een punt p dat behoort tot S is begrensd als en slechts als p behoort tot het inwendige van de convex omhullende van S. Bewijs deze eigenschap. Waar wordt deze eigenschap gebruikt, of waarom is ze nuttig?:}\\
+		\item \textbf{Hoe bewijs je dat een Voronoi-diagram van een verzameling van N sites maximaal 2N-5 Voronoi-punten en maximaal 3N-6 Voronoi-zijden bezit? Waarom is het belangrijk dat het aantal Voronoi-zijden (slechts) O(N) is? Geef minstens één voorbeeld van het nut van deze eigenschap:}\\
+		\item \textbf{(Gegeven een tekening met een aantal punten als Voronoi-sites en een positie van de doorlooplijn). Schets op bijhorende tekening het golffront voor de positie die de doorlooplijn reeds bereikt heeft, teken eveneens de Voronoi-punten en Voronoi-zijden die het algoritme van Fortune reeds bepaald heeft. Schrijf eventueel commentaar bij je tekening om één en ander te verduidelijken:}\\
+		\item \textbf{Geef een voorbeeld waarbij de parabool behorende bij een Voronoi-site méér dan 1 segment bijdraagt aan het golffront (algoritme van Fortune):}\\
+		\item \textbf{Geef een voorbeeld waarbij voor 6 Voronoi-sites, elk van de 6 sites door de doorlooplijn behandeld worden, vooraleer er een cirkel-event plaatsvindt. De sites moeten algemeen van aard zijn, ttz geen 3 sites op een lijn of 4 sites op een cirkel:}\\
+	\end{itemize}
+	
+	
+	\section{Delaunay Triangulatie}
+	\subsection{Typische examenvragen}
+	\begin{itemize}
+		\item \textbf{Leg het verband uit tussen het Voronoi-diagramma van een puntenset en de Delaunay triangulatie van diezelfde puntenset:}\\
+		\item \textbf{Op welke manier kan de Delaunay-triangulatie van een puntenset geconstrueerd worden?:}\\
+		\item \textbf{Leg de equivalentie uit tussen de "cirkeleigenschappen" in zowel het Voronoi-diagramma als de Delaunay-triangulatie:}\\
+		\item \textbf{Gegeven een set punten met bijhorende triangulatie. Is de getekende triangulatie een Delaunay-triangulatie? Waarom wel? Waarom niet? Welke eigenschappen kan je gebruiken om dit vast te stellen?:}\\
+		\item \textbf{In een getekende Delaunay-triangulatie wordt een punt toegevoegd. Schets de resulterende Delaunay-tiangulatie:}\\
+	\end{itemize}
+	%Opmerking: vragen waarbij gevraagd wordt handmatig na te gaan of bepaalde eigenschappen gelden in een getekende Delaunay-triangulatie of Voronoi-diagramma zullen natuurlijk geen "milimeter-werk" zijn om iedereen op stang te jagen. Vaak zou je de cirkeleigenschappen met het blote oog moeten kunnen zien of gemakkelijk moeten kunnen afleiden met een eenvoudige construtie met een meetlat of passer ...
+	
+	
+	\section{Béziercurven}
+	\subsection{Typische examenvragen}
+	\begin{itemize}
+		\item \textbf{Gegeven een curve met enkele controlepunten met bijhorende curve: is dit (vermoedelijk) een Béziercurve? Waarom wel, waarom niet? Welke eigenschappen gebruik je om dit te achterhalen?:}\\
+		\item \textbf{Gegeven enkele controlepunten: schets zo goed mogelijk (gebruik makende van eigenschappen van Béziercurven) de resulterende Bézier-curve:}\\
+		\item \textbf{Wat zijn de belangrijkste eigenschappen van Béziercurven?:}\\
+		\item \textbf{Leg uit: graadverhoging in Bézier-curven:}\\
+		\item \textbf{Leg uit: Splitsing van Béziercurven:}\\
+		\item \textbf{Leg uit hoe bij samengestelde Béziercurven C1- of C2-continuïteit voor de samengestelde curve bekomen wordt. Illustreer dit ook grafisch:}\\
+		\item \textbf{Leg de ‘variatie-verminderingseigenschap’ van Bézier-curven uit. Waarom is deze belangrijk bij het ontwerp van curven?:}\\
+		\item \textbf{Hoe vertaalt eigenschap X van Bernstein-veeltermen zich naar het gedrag van Bézier-curven?:}\\
+	\end{itemize}
+	
+	
+	\section{Binairy Space partitions}
+	%The spiderman one
+	\subsection{Typische examenvragen}
+	\begin{itemize}
+		\item \textbf{Wat is een Binary Space Partioning boom?:}\\
+		\item \textbf{Bewijs dat een lage densiteits BSP boom O(n/k) bladknopen heeft:}\\
+		\item \textbf{Wat is de bedoeling van de krimp-stap bij het opbouwen van een lage densiteits BSP boom?:}\\
+		\item \textbf{Wat is het verband tussen een kd-boom en een BSP-boom?:}\\
+		\item \textbf{Wat is de definitie van de dichtheid (density) van een set van objecten? Welk nut heeft de definitie van densiteit bij het opbouwen van een spatiale binaire zoekstructuur?:}\\
+	\end{itemize}
+	
+	
+	\section{Motion planning \& Visibility graphs}
 \end{document}
