@@ -266,7 +266,75 @@
 	
 	
 	\section{Triangulaties van veelhoeken}
-	Dit deel begint met een klein voorbeeld als context. Stel dat je in een museum werkt en moet besluiten waar de bewakers 's nachts zullen staan. Je wilt natuurlijk zo min mogelijk (stilstaande) bewakers voor de ruimte die je moet bewaken. Dit wordt het \textit{Museumprobleem} genoemd. Bij deze probleemstelling komen dan ook de vraag: Wat is het minimaal aantal bewakers dat nodig is voor een n-hoek? 
+	Dit deel begint met een klein voorbeeld als context. Stel dat je in een museum werkt en moet besluiten waar de bewakers 's nachts zullen staan. Je wilt natuurlijk zo min mogelijk (stilstaande) bewakers voor de ruimte die je moet bewaken. Dit wordt het \textit{Museumprobleem} genoemd. Bij deze probleemstelling komen dan ook de vraag: Wat is het minimaal aantal bewakers dat nodig is voor een n-hoek? Hier wordt dan ook een max over min forumlering gebruikt: Wat is het grootste aantal bewakers dat een veelhoek minimum nodig heeft? Je kan een 12-hoek bijvoorbeeld opdelen met 1 bewaker en met 4 bewakers, het maximum van de minima is hier 4 en dat is wat we dan zoeken. Dit getal schrijven we als $G(n)$ met n het aantal hoeken. Wat vanzelfsprekend is, is dat $G(n) \geq 1$ en dat $G(n) \leq n$ maar dit is te algemeen, we moeten specifieker gaan zoeken. Na een aantal voorbeelden is het duidelijk dat dit getal gelijk is aan $\lfloor n/3\rfloor$. Dit is dus het aantal bewakers dat voor een veelhoek met n hoeken altijd genoeg zal zijn om heel de ruimte te bewaken. 
+	
+	\subsection{Triangulaties}
+	Een triangulatie is het toevoegen van zo veel mogelijk niet snijdende diagonalen in de veelhoek. Een diagonaal is een lijnstuk tussen twee hoekpunten die strikt zichtbaar zijn tegenover elkaar. Zoals je wel al merkt is zo een triangulatie niet uniek, er bestaan er heel veel en er is niet één juiste. Wat we met zekerheid kunnen zeggen is dat elke veelhoek kan getrianguleer worden om uit te komen op $n-2$ driehoeken. We bewijzen die door middel van inductie: 
+	- $n-3$ : triviaal (1 driehoek wordt getrianguleerd in 1 driehoek).\\
+	- $n > 3$ : 
+	\begin{itemize}
+		\item We construeren een diagonaal in $P$:
+		\begin{itemize}
+			\item $v$ is meest linkse vertex van $P$, met buren $u$ en $w$
+			\item Geval 1: Indien $\overline{uw}$ binnen $P$ ligt $\rightarrow$ $\overline{uw}$ is een diagonaal
+			\item Geval 2: er liggen vertices van $P$ binnen de driehoek $\vartriangle uw$:
+			
+			neem $v'$ als verst verwijderde van de lijn $\overline{uw}$. $\overline{vv'}$ kan $P$ niet snijden $\rightarrow$ $\overline{vv'}$ is een diagonaal. 
+		\end{itemize}
+		\item De diagonaal verdeelt $P$ in $P_1$ en $P_2$, met $m_1$ en $m_2$ vertices
+		\item (veronderstel dat de stelling geldt voor $m<n)$
+		\begin{itemize}
+			\item $P_1$: $m_1$ vertices, triangulatie in $m_1$-2 driehoeken. 
+			\item $P_2$: $m_2$ vertices, triangulatie in $m_2$-2 driehoeken. 
+			\item $m_1 - m_2 = n+2$
+		\end{itemize}
+		\item $\rightarrow$ Triangulatie van $P$ telt $(m_1 -2) + (m_2 - 2) = n-2$ driehoeken. 
+	\end{itemize}
+	In het museumprobleem kunnen we gebruik maken van deze triangulatie: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\linewidth]{afbeeldingen/triangulatie-bewakers}
+		\label{fig:triangulatie-bewakers}
+	\end{figure}
+	Het is duidelijk dat de laatste figuue zorgt voor een optimale oplossing: zo weinig mogelijk bewakers die nog steesd de volledige ruimte in het oog kunnen houden. Het vinden van deze perfecte plekken kan aan de hand van een 'kleuring'. 
+	
+	
+	\subsection{kleuring}
+	Een kleuring is het toekennen van kleuren aan vertices zodat verbonden vertices een verschillende kleur hebben. Voor onze situatie gebruiken we een 3-kleuring, elke vertex mag dus een van die drie kleuren hebben. Zo en kleurring kan gemakkelijk gevonden worden door telkens een driehoek te halen uit de triangulatie, elke keer als die driehoek terug toegevoegd moet worden zal de nieuwe hoek die nog geen kleurring heeft, eenduidig bepaald een van de drie kleuren bevatten. Na het kleuren van de vertices kan je dan besluiten een van de kleuren te kiezen om dan de bewakers daar te positioneren. Het is ergens wel logisch dat er van sommige kleuren meer zijn dan anderen, net zoals hiernoder te zien is. 
+	\begin{figure}[h]
+		\centering
+		\subfigure[]{\includegraphics[width=0.32\textwidth]{afbeeldingen/triangulatie-rood}} 
+		\subfigure[]{\includegraphics[width=0.32\textwidth]{afbeeldingen/triangulatie-groen}} 
+		\subfigure[]{\includegraphics[width=0.32\textwidth]{afbeeldingen/triangulatie-blauw}}
+		\label{fig:trianuglation-colours}
+	\end{figure}
+	Het is hier duidelijk dat rood en blauw elk een goeie verdeling hebben, maar ook niet allebei optimaal. Bij beiden zou er nog een bewaker kunnen wegvallen en zou heel het oppervlak nog steeds bewaakt zijn. Gezien dit een 3-kleuring is, wordt elke kleur maximaal $n/3$ keer gebruikt en vermits $n$ geheel is: $\lfloor n/3 \rfloor$. Een goede voorstelling hiervan is ook Chvátal's kam. 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\linewidth]{afbeeldingen/triangulatie-kam}
+		\label{fig:triangulatie-kam}
+	\end{figure}
+
+	Het is duidelijk dat dit het ergste geval is. We weten nu de theorie achter deze triangulaties, maar we moeten nog ontdekken hoe we deze moeten opstellen. 
+	
+	
+	\subsection{Hoe te trianguleren}
+	Het trianguleren begint best door elke keer een oor af te snijden en zo verder te zoeken naar een triangulatie binnen de nieuwe veelhoek met $n-1$ vertices. De tijdscomplexiteit van die algoritme zou dan $O(n^2)$ zijn. Voor convexe veelhoeken wordt die zelfs $O(n)$. 
+	
+	Om een veelhoek te trianguleren beginnen we eerst met het definiëren van een 'y-monotone' veelhoek. Een veelhoek is y-monotoon als een horizontale lijn de veelhoek over slechts één interval snijdt. De veelhoek wordt opgesplitst in y-monotone veelhoeken en van elk van deze veelhoeken wordt dan de triangulatie gezocht. In een veelhoek kan elke hoek ingedeeld worden als volgt: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{afbeeldingen/triangulaties-y-monotoon}
+		\label{fig:triangulaties-y-monotoon}
+	\end{figure}
+	Het is relatief duidelijk dat de split en merge knopen het probleem vormen om de veelhoek y-monotoon te maken. Wanneer een veelhoek niet y-monotoon is, is het duidelijk dat het of een split node heeft, of een merge node, deze zullen we moeten wegwerken met een algoritme. Het algoritme zal dan een diagonaal maken bij merge-vertices die naar beneden gaat, en bij split-vertices die naar boven gaat. Dit zal, you guessed it, met een doorlooplijn algoritme gebeuren. Hierij initialiseren we een helper voor een edge, deze helper is de laatste vertex boven de doorlooplijn, waarbij de horizontale tussen de edge en de vertex volledig binnen de veelhoek ligt. 
+	
+	Om een merge vertex juist op te lossen, kijk je telkens er een nieuwe helper wordt geïnitialiseerd, of de oude helper een merge vertex is. Als die een merge vertex is, dan zal de oude en de nieuwe helper verbonden worden. Een split vertex zal gelijkaardig opgelost worden, maar dan zal de split een nieuwe helper zijn en wordt deze verboncen met de oude helper. Dit algoritme kan gebeuren in $O(n\log(n))$ met het geheugen in lineaire tijd. 
+	
+	De triangulatie van de overbleven monotone veelhoeken kan dan gedaan worden met een greedy algoritme. We sorteren de vertices volgens y-coördinaat en zetten de twee eerste vertices op de stack. Daarna wordt er zo veel mogelijk getrianguleerd naar wat er op de stack staat. Dit geldt voor alle geldige diagonalen op de stack. Zodra er een ongeldige diagonaal is, wordt er naar de laatste vertex gekeken en van daar uit nieuwe diagonalen maken. Hier is een goede illustratie van in de slides. 
+	
+	Dit algoritme werkt in lineaire tijd $\rightarrow$ $O(n)$. Met het algoritme om de veelhoek in te delen in monotone veelhoeken zal de totale complexiteit $O(n\log(n))$ zijn. 
+	
 	
 	\subsection{Typische examenvragen}
 	\begin{itemize}
@@ -279,7 +347,67 @@
 	
 	
 	\section{Lineaire programming \& gerandomiseerde algoritmen}
+	De probleemstelling van het eerste deel van dit stuk is: Kan een bepaald ontwerp gemaakt worden met één enkele gietvorm en kan dat object in één vloeiende beweging verwijderd worden. De probeemstelling is gevisualiseerd als volgt: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\linewidth]{afbeeldingen/gietvorm-voorbeeld}
+		\label{fig:gietvorm-voorbeeld}
+	\end{figure}
 	
+	De richting kan ook voorgesteld worden door pijlen in een bepaalde richting (geprojecteerd op $y=1$). Daar waar de richtingen overlappen, kan je dan naar boven trekken aan de vorm en zal je die in één keer eruit kunnen halen. Op dezefde manier kan die op een vlak geprojecteerd worden voor een 3d vorm. Hier hoort ook een lemma bij (dat ik zelf nog niet volledig snap)
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{afbeeldingen/gietvorm-lemm}
+		\label{fig:gietvorm-lemma}
+	\end{figure}
+	
+	Geldige richtingen in 3d kunnen voorgesteld worden door $n-1$ hafvlakken, met n het aantal vlakken van de vorm (waarbij -1 staat voor het bovenste vlak). De algemene vraag is dan: bereken de verzameling punten die beantwoorden aan alle constraints. Een interessante observatie is dat elk van die doorsnedes altijd een convexe vorm zal zijn. 
+	
+	
+	\subsection{intersectie van halfvlakken}
+	
+	\begin{description}
+		\item[Brute force]:\\
+			Dit algoritme zal recursief berekenen wat de doorsnede is en gebruikt dan DCEL's om deze opnieuw te mergen. De pseudocode zal dit duidelijker maken: 
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\linewidth]{afbeeldingen/intersectHalfPlanes}
+				\label{fig:intersecthalfplanes}
+			\end{figure}
+			
+		\item[Doorlooplijn]:\\
+			Hier moet niet echt veel uitleg meer bij, het is gewoon een doorlooplijn die de linker- en rechterkant zal updaten met snijpunten als events.  
+		\item[Incrementeel]:\\
+			Voor het probleem van de gietvorm, is het genoeg één oplossing te kennen, en niet de volledige doorsneden. Alle halfvlakken kunnen gerepresenteerd worden door een vergelijking die groter moet zijn dan een bepaalde waarde, wat dus een rechte zal geven met een helft die wel mag gelden. We definiëren dan een functie f die afhankelijk is aan deze constraints en als we f maximaliseren, zullen we een bepaalde waarde hebben die deel is van de doorsnede. Het kan ook zijn dat we f blijven maximaliseren, maar dit zal uitkomen op een edge van de doorsneden, of zelfs tot in het oneindige voort zal gaan. 
+			
+			Dit algoritme is gelijkaardig aan een voor een een halfvlak toevoegen en veronderstellen dat de oplossing uniek is. Er zullen dus ook twee halfvlakken moeten geplaatst worden op de randen om de onbegrensde gevallen ook in rekening te brengen. Als bij het toevoegen van een halfvlak, de vertex nog steeds tot de doorsnede behoort: behouden we die vertex, anders moet er een nieuwe vertex gezocht worden. 
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.7\linewidth]{afbeeldingen/gietvorm-incrementeel}
+				\label{fig:gietvorm-incrementeel}
+			\end{figure}
+			
+			De worst case is wanneer de vertex telkens opnieuw geplaatst moet worden, dan wordt de tijdscomplexiteit $O(n^2)$.
+		\item[Random incrementeel]:\\
+			Dit algoritme zal hetzelfe doen als het vorige, maar deze keer de halfvlakken willekeurig toevoegen. De kans bij een willekeurig halfvlak is $\frac{(i-2)}{i}$ de kans dat de laatste toevoeging een goedkope stap is. De tijdscomplexiteit zou dan $\sum_{i=1}^n O(i)\cdot\frac{2}{i} = O(n)$.
+	\end{description}
+	
+	
+	\subsection{kleinst omsluitende cirkel}
+	Gegeven een set punten, wat is de kleinst omsluitende cirkel die je daarrond kan trekken. Een logische observatie is dat er een aantal punten op de cirkel zullen moeten liggen, anders is de cirkel niet minimaal. Specifieker zelfs: er zullen telkens minstens 3 punten op die cirkel liggen. Andere eigenschappen zijn: 1) De kleinst omsluitende cirkel is uniek, 2) indien een punt binnen in de cirkels weggehaald wordt, zal de cirkel zelf niet veranderen en 3) In dien een punt buiten de cirkel ligt, komt dat punt op de cirkel te liggen. 
+	
+	Dit probleem kan ook opgelost worden met een willekeurig incrementeel algoritme. Dit betekent dat er willekeurig telkens een punt zal toegevoegd worden en een voor een. Hierbij is het volgend lemmma belangrijk: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{afbeeldingen/cirkel-lemma}
+		\label{fig:cirkel-lemma}
+	\end{figure}
+	
+	De kleinste omsluitende cirkel voor n punten kan berekend worden met $O(n)$ tijdscomplexiteit. 
+	
+	
+	\subsection{Gerandomiseerde incrementele algoritmen}
+	Deze algoritmen zijn al hierboven besproken maar hier overlopen we de algemene eigenschappen nog eens. Bij deze algoritmen moet de test om na te gaan of de oplossing geldig is, snel zijn. Als de huidige oplossing herberekend moet worden, moet dit snel gebeuren. Het starten van het algoritme moet kunnen vanaf een kleine set voorwaarden. In de slides zijn er nog een aantal voorbeelden waarbij er gevraagd wordt of je die kan oplossen met RIC. 
 	
 	
 	\section{Orthogonal Range searching, Kd-bomen}
