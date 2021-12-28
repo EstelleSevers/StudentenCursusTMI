@@ -535,6 +535,63 @@
 	
 	
 	\section{Voronoi Diagramma's}
+	Gegeven een verzameling 'sites' (of gewoon punten op een vlak), wat is de meest nabije site voor om het even welk punt in het vlak. De terminologie is hieronder nog eens te lezen: 
+	\begin{figure}[H]
+		\includegraphics[width=0.4\linewidth]{afbeeldingen/voronoi/terminologei}
+		\label{fig:terminologei}
+	\end{figure}
+	
+	
+	\subsection{Enkele observaties}
+	Het valt op dat in deze diagrammen, de edges telkens de middelloodlijn zijn tussen de 2 sites. Niet alle edges zijn begrensd, wat dus ook uitbreid tot dat niet elke voronoi-cel begrensd is. De edges zullen elk samenkomen in een vertex, de voronoi-vertex. 
+	
+	Elke voronoi-vertex is de doorsnede van $n-1$ halfvlakken, wat betekent dat elke cel convex is en door tot $n-1$ edges kan bergensd zijn. De structuur van zo'n voronoi diagramma kan in een stelling worden geschreven en ook bewezen: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{afbeeldingen/voronoi/structuur}
+		\label{fig:structuur}
+	\end{figure}
+	
+	De tijdscomplexiteit kan ook afgeleid worden uit het aantal sites, het aantal vertices en het aantal edges: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{afbeeldingen/voronoi/complexiteit}
+		\label{fig:complexiteit}
+	\end{figure}
+	
+	
+	Naast deze observaties, structuren en complexiteit zijn er ook een aantal eigenshappen die bij voronoi diagramma's gelden, meer specifiek eigenschappen met cirkels: 
+	
+	\begin{itemize}
+		\item Elke voronoi-vertex is het centrum van een cirkel door 3 voronoi-sites. 
+		\item Elk punt op een voronoi-edge is het centrum van een cirkel door 2 sites.
+	\end{itemize}
+	
+	Na al deze uitbundige informatie, komen de algoritmes om zo een voronoi-diagramma te bepalen. 
+	
+	\subsection{Algoritmes}
+	\begin{description}
+		\item Een eerste manier is om te werken met dat een voronoi-veelhoek gezien kan worden als de doorsnede van $n-1$ halfvlakken. 
+		\item[Incrementeel algoritme]: Telkens een nieuwe site toevoegen aan het voronoi diagramma, er wordt dan met de cirkeleigenschappen bekken welke voronoi-edges opnieuw berekend moeten worden. 
+		\item[Verdeel-en-heers algoritme]: Eerst een deel van de sites verwerken en het diagramma opstellen om dan te mergen. 
+		\item[Doorlooplijn]: De doorlooplijn zou over de sites als events lopen en op die manier het diagramma aanpassen, het probleem hierbij is dat een doorlooplijn niets kan aanpassen aan waar die al is langsgeweest. Dit kan een probleem maken aangezien de edges achter de doorlooplijn wel nog kunnen veranderen. 
+		\item[Groeiende cirkels]: De voronoi cellen zijn cirkels die vanuit een site starten om groter te worden en uiteindelijk de voronoi edges te bepalen. Hieronder volgt een visualisatie: 
+		\begin{figure}[h]
+			\centering
+			\subfigure[]{\includegraphics[width=0.32\textwidth]{afbeeldingen/voronoi/groeiende-cirkels-first}} 
+			\subfigure[]{\includegraphics[width=0.32\textwidth]{afbeeldingen/voronoi/groeiende-cirkels-second}} 
+			\subfigure[]{\includegraphics[width=0.32\textwidth]{afbeeldingen/voronoi/groeiende-cirkels-third}}
+			\label{fig:groeiende-cirkels-voorbeeld}
+		\end{figure}
+		\item[Groeiende kegels]: Hetzelfde concept als de cirkels maar er is nu ook de tijdsmeting op de z-as. Het uiteindelijke resultaat wordt dan op het xy-vlak geprojecteerd. 
+		\item[Doorloopvlak]: Een vlak dat schuin staat tegenover het xy-vlak, onder dezelfde hoek als de kegels (van hierboven). De snijding met de kegel maakt dan een golf na en alles achter die golf kan niet meer aangepast worden. Dit is de basis voor het meest efficiënte algoritme dat in het deel hieronder besproken zal worden. 
+	\end{description}
+	
+	
+	%TODO problemen voor morgenl ol yeet
+	\subsection{Het golffront}	
+	
+	
 	\subsection{Typische examenvragen}
 	\begin{itemize}
 		\item \textbf{Wat is het verband tussen het Voronoidiagramma van een verzameling punten, en de Delaunay triangulatie?:}\\
