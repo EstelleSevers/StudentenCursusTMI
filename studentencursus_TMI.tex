@@ -411,6 +411,62 @@
 	
 	
 	\section{Orthogonal Range searching, Kd-bomen}
+	\subsection{Interval queries}
+	We vragen ons af of we een algoritme kunnen maken om alle punten te bepalen die in een d-dimensionaal zoek-interval liggen. (Bijvoorbeeld: al de natuurlijkde getallen tussen 0 en 100)
+	
+	In 1D is dit: we willen een datastructuur vinden die ons gemakkelijk alle punten kan geven die tussen twee punten liggen. Het eerste waar we aan denken is dan een gebalanceerde binaire zoekboom: zoeken naar de kleinste waarde (of als deze er niet in ligt, de eerste waarde boven deze kleinste) en dan zoeken naar de grootste waarde van het interval. Bij het zoeken naar de kleinste en grootste waarde is het duidelijk dat er doorheen de zoekboom een pad overlopen zal worden. Alle 'subbomen' van die pad zullen deel zijn van de gegevensstructuur van het interval. 
+	
+	Het algoritme zal dus deze subbomen moeten bijhouden. In eerste instantie zal de 'split' node bijgehouden moeten worden. Zodra de split node is gevonden, kan de linkerboom gehandeld worden door elke rechtersubboom te rapporteren en het omgekeerde voor het rechterpad. Dit algoritme zal zorgen voor een geheugencomplexiteit $O(n)$. Het opbouwen van de zoekboom zal $O(n\log(n))$ complexiteit hebben en het zoeken zal 2 keer $O(\log(n))$ vragen om de kleinste en grootste waarde te zoeken. Daarna zal elk punt (k) in het interval ook nog overlopen worden, totale complexiteit van het zoeken van het interval is dus $O(\log(n) + k)$. 
+	
+	
+	\subsection{Kd-boom}
+	\begin{description}
+		\item[Constructie]:\\
+		Deze structuur is vooral om een interval in 2d te zoeken, er wordt dan afwisselend tussen x- en y-as afgewisseldn om de ruimte verder op te splitsen. De pseudocode om zo'n bomen op te stellen is hieronder te vinden: 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{afbeeldingen/kd-bomen/constructie}
+			\label{fig:kd-constructie}
+		\end{figure}
+		Een kd-boom zal $O(n)$ aan geheugen nodig hebben en $O(n\log(n))$ aan tijdscomplexiteit. 
+		\item[Zoeken]:\\
+		Om te zoeken naar een interval, zal men de boom moeten aflopen. Elke knoop zal een extra grensniveau aanduiden en dus een kleinere regio definiëren. Hieronder volgen een goed visueel voorbeeld en de pseudocode voor dit algoritme. 
+		\begin{figure}[h]
+			\centering
+			\subfigure[]{\includegraphics[width=0.40\textwidth]{afbeeldingen/kd-bomen/zoeken-voorbeeld}} 
+			\subfigure[]{\includegraphics[width=0.40\textwidth]{afbeeldingen/kd-bomen/pseudocode}} 
+			\label{fig:kd-zoeken}
+		\end{figure}
+		\item[efficiëntie]:\\
+		Het rapporteren van de subbomen gebeurt in $O(k)$ met k het aantal punten dat teruggegeven moet worden als output. Het aantal knopen dat bezocht moet worden is $O(\sqrt{n})$. Deze expressie wordt gevonden door te kijken naar hoeveel regio's een horizontale lijn of een verticale lijn zou doorkruisen in zo'n regio in een kd-boom. Al deze doorsneden regio's vormen een boom met hoogte $\tfrac{1}{2}\log(n)$, aangezien we telkens twee grensniveaus moeten springen. Het totaal aantal regio's zal dan begrensd zijn door $2^{\frac{1}{2}\log(n)} = O(\sqrt{n})$. Zodra we beginnen aan hogere dimensies dan 2d, komen we aan een lineaire tijdscomplexiteit. 
+	\end{description}
+	
+	
+	\subsection{Range trees}
+	Deze bomen zijn eigenlijk gelijk aan de kd-bomen, enkel dat ze snellere zoektijd willen bekomen ten koste van het geheugen. 
+	
+	Voor 1d houdt een range tree in: Vanaf een split node kunnen we opslaan wat de mogelijke eindknopen zijn van de zoekopdracht. 
+	
+	Voor 2d zal er een gebalanceerde boom zijn op basis van de x-coordinaat, in elke knoop is dan een nieuwe gebelanceerde boom op basis van de y-coordinaat. 
+	
+	Voor grotere dimensies voel je aan dat er dan per knoop nog extra dimensies zullen volgen. Elk punt zal maximaal 1 keer opgeslagen zijn in de boom $\rightarrow O(n)$ per niveau. Per punt zijn er dan $P(\log(n))$ niveaus  waarop het punt wordt opgeslagen. Het geheugen zal hier dus $O(n\log(n))$ zijn. De pseudocode voor het opbouwen en het zoeken zijn hieronder gegeven: 
+	\begin{figure}[H]
+		\centering
+		\subfigure[]{\includegraphics[width=0.49\textwidth]{afbeeldingen/kd-bomen/rangetree-build}} 
+		\subfigure[]{\includegraphics[width=0.49\textwidth]{afbeeldingen/kd-bomen/rangetree-zoeken}} 
+		\label{fig:range-treees-pseudocode}
+	\end{figure}
+
+	De tijdscomplexiteit bij range zal inderdaad beteren, zoals hieronder te zien: 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{afbeeldingen/kd-bomen/rangetrees-tijdscomplexiteit}
+		\label{fig:rangetrees-tijdscomplexiteit}
+	\end{figure}
+	 
+	
+	
 	\subsection{Typische examenvragen}
 	\begin{itemize}
 		\item \textbf{Wat is een kd-boom? Leg uit:}\\
@@ -418,8 +474,58 @@
 		\item \textbf{Leg de idee uit van Range Trees:}\\
 	\end{itemize}
 	
-	
+	%TODO hier zit ik!
 	\section{Puntlocatie}
+	Deze les is gebaseerd op de vraag: ligt een punt in een gegeven veelhoek? 
+	
+	
+	\subsection{Een aantal oplossingen}
+	In dit deel worden een aantal oplossingen overlopen, allemaal heel simpel maar niet perse heel efficiënt. 
+	\begin{itemize}
+		\item We kunnen vanaf het punt kijken hoeveel snijpunten deze heeft met de veelhoek, als dit oneven is zal het punt in de veelhoek liggen. En probleem hiermee is wat al men hoekpunten tegenkomen? Dit is een edge case maar is wel heel relevant. 
+		\item Een andere manier is de som te nemen van alle hoeken met alle hoekpunten van de veelhoek. Als de som van deze hoeken 0° is, dan is het punt buiten de veelhoek. Als de som 360° is, dan zit het punt wel in de veelhoek.
+		\item Er is ook een manier om dit te bepalen met de kwadranten van een assenstelsel, waarbij er bijgeteld moet worden of niet bij het veranderen van een kwadrant. 
+		\item Er kan een grid worden geplaatst over de veelhoek, afhankelijk van in wekl vierkantje het punt ligt weten we al op voorhand of het in de veelhoek zit of niet. In de vierkantjes kan ook een zijde van de veelhoek liggen, dan moeten er meer testen volgen. 
+	\end{itemize}
+	
+	\subsection{Vlakverdeling}
+	Een eerste aanpak tot het verdelen van de ruimte in verticale stroken die liggen op punten waar lijnen snijden. Het geheugencomplexiteit is dan $2n$, terwijl de tijdscomplexiteit om een punt te bepalen binnen een slab query $O(\log(n))$ is. Binnen zo een slab snijden er geen edges, deze kunnen dus gesorteerd worden op basis van y-coördinaat, elke slab heeft een $O(n)$ geheugen nodig. Het vinden van de locatie binnen de slab zal dus $O(\log(n))$ vragen. Het totale geheugen zal dus $O(n^2)$ vragen, wat niet ideaal is. 
+	\\
+	\\
+	Een tweede aanpak is een \textit{trapezium map} opstellen van de vlakverdeling. Hier verbinden we elke vertex met de edge erboven en erronder. We veronderstellen hier dat elke vertex een verschillend x-coördinaat heeft en dat er een bounding box bestaat rond de vlakverdeling. De faces die zullen overblijven, zijn allemaal driekhoeken of trapezia. Deze trapezia zullen bepaald worden door: \textit{top, bottom, leftp, rightp}, top en bottom verwijzen naar edges en leftp en rightp verwijzen naar trapezia. Over deze trapezium map bestaat ook nog een lemma: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\linewidth]{afbeeldingen/trapezium-map/lemma}
+		\label{fig:lemma}
+	\end{figure}
+	
+	S zal bestaan uit $2n$ vertices, waarbij elke vertex 2 nieuwe vertices kan creëeren. De bounding box zelf bevat nog eens 4 vertices, wat een totaal geeft van $\rightarrow 4 + 2n + 2(2n) = 6n + 4$ vertices. Het links eindpunt van een segment kan een linkerzijde van 2 trapezia definiëren, een rechts eindpunt kan een linkerzijde van 1 trapezium definiëren. R definieerd del linkerzijde van 1 trapezium, diet komt neer op $3n + 1$ trapezia. Twee trapezia die aangrenzend zijn (dus een verticale lijn gemeenschappelijk) hebben altijd een top of bottom gemeenschappelijk. Elk lijnsegment zal in deze structuur verwijzen naar 2 eindpunten en de oorspronkelijke face die boven de edge ligt. Een trapezium kan dus via bottom te weten komen in welke face deze zit. 
+	
+	De effectieve gegevensstructuur die hiervoor kan gebruikt worden is een gerichte acyclische graaf (DAG). Elk blad is dan een trapezium, de x-knopen zijn de eindpunten van segmenten, deze verwijzen dan naar een lijnsegment (de y-knopen) die dan een boven en onder test hebben die verwijzen naar de trapezia. Het opstellen van deze graaf zal verlopen via een RIC (Randomized Incremental Constitution), zoals in de vorige les gezien. 
+	Er zal dus telkens een nieuw lijnsegment worden toegevoegd en hier zal dus de trapezium map rond aangepast worden. Deze aanpasseingen gaan heel plaatselijk zijn, waardoor het RIC dus heel erg handig is. Het toevoegen van een lijnsegment zal twee stappen ondervinden:  
+	\begin{enumerate}
+		\item Als eerste overlopen we het nieuwe toegevoegde lijnstuk en duiden we alle trapezia waar die lijnstuk door ligt. Dit door telkens te zoeken naar bovenliggende lijnstukken, waarbij we het linkereindpunt zoeken en van daaruit kijken naar de trapezia. Hieronder volgt de pseudocode, voor een duidelijk visuele representatie: check de slides ;). 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{afbeeldingen/trapezium-map/stap1-lijnstukken}
+			\label{fig:stap1-lijnstukken}
+		\end{figure}
+		
+		%TODO herbekijken in de les. 
+		\item Als tweede zullen we de verticale verdeling updaten. In het algemene geval zal de graaf dan geüpdated moeten worden vanaf een bepaald niveau in de boom, en vraagt die niet ontzettend veel rekenwerk. 
+	\end{enumerate}
+	De tijdscomplexiteit van de eerste stap is het zoeken van k trapezia. $O(k)$. Dit is ook de comlexiteit van de tweede stap voor het aantal interne knopen en het aantal bladeren. 
+	\\
+	!! Examenvraag !!: Zo'n graaf kunnen opstellen voor een aantal lijnsegmenten, les opnieuw bekijken en snappen!!!
+	
+	De uiteindelijke trapezium zal niet afhangen van de RIC, maar de uiteindelijke graaf wel! Zo kan het zijn dat een graaf heel efficiënt is of net helemaal niet. Voor de analyse van de tijdscomplexiteit, kijken we naar de uitkomst want ik ben effe te moe om dit na te kijken en moet de les best herbekijken hiervoor. 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\linewidth]{afbeeldingen/trapezium-map/theorem}
+		\label{fig:theorem}
+	\end{figure}
+	
+	
 	\subsection{Typische examenvragen}
 	\begin{itemize}
 		\item \textbf{Leg de pincipes uit van een trapezium-map:}\\
