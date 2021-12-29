@@ -70,10 +70,10 @@
 	
 	\begin{figure}[h]
 		\centering
-		\subfigure[]{\includegraphics[width=0.24\textwidth]{afbeeldingen/first-convex}} 
-		\subfigure[]{\includegraphics[width=0.24\textwidth]{afbeeldingen/second-convex}} 
-		\subfigure[]{\includegraphics[width=0.24\textwidth]{afbeeldingen/third-convex}}
-		\subfigure[]{\includegraphics[width=0.24\textwidth]{afbeeldingen/fourth-convex}}
+		\subfigure{\includegraphics[width=0.24\textwidth]{afbeeldingen/first-convex}} 
+		\subfigure{\includegraphics[width=0.24\textwidth]{afbeeldingen/second-convex}} 
+		\subfigure{\includegraphics[width=0.24\textwidth]{afbeeldingen/third-convex}}
+		\subfigure{\includegraphics[width=0.24\textwidth]{afbeeldingen/fourth-convex}}
 		\label{fig:incremental-example}
 	\end{figure}
 	Bij afbeelding c maken die punten duidelijk een linkerdraai, wat niet zou mogen voor een convex hull, dus zullen de twee edges verwijderd worden en vervangen worden door de nieuwe. Dit zal voor heel het puntenwolk verdergaan voor de bovenste helft. Voor duidelijkheid is hieronder nog de psuedocode
@@ -109,8 +109,8 @@
 	
 	\begin{figure}[h]
 		\centering
-		\subfigure[]{\includegraphics[width=0.45\textwidth]{afbeeldingen/first-jarvis}} 
-		\subfigure[]{\includegraphics[width=0.45\textwidth]{afbeeldingen/second-jarvis}} 
+		\subfigure{\includegraphics[width=0.45\textwidth]{afbeeldingen/first-jarvis}} 
+		\subfigure{\includegraphics[width=0.45\textwidth]{afbeeldingen/second-jarvis}} 
 		\label{fig:jarvis' example}
 	\end{figure}
 
@@ -173,10 +173,10 @@
 	
 	\begin{figure}[h]
 		\centering
-		\subfigure[]{\includegraphics[width=0.24\textwidth]{afbeeldingen/first-doorlooplijn}} 
-		\subfigure[]{\includegraphics[width=0.24\textwidth]{afbeeldingen/second-doorlooplijn}} 
-		\subfigure[]{\includegraphics[width=0.24\textwidth]{afbeeldingen/third-doorlooplijn}}
-		\subfigure[]{\includegraphics[width=0.24\textwidth]{afbeeldingen/fourth-doorlooplijn}}
+		\subfigure{\includegraphics[width=0.24\textwidth]{afbeeldingen/first-doorlooplijn}} 
+		\subfigure{\includegraphics[width=0.24\textwidth]{afbeeldingen/second-doorlooplijn}} 
+		\subfigure{\includegraphics[width=0.24\textwidth]{afbeeldingen/third-doorlooplijn}}
+		\subfigure{\includegraphics[width=0.24\textwidth]{afbeeldingen/fourth-doorlooplijn}}
 		\label{fig:sweepline-example}
 	\end{figure}
 
@@ -303,9 +303,9 @@
 	Een kleuring is het toekennen van kleuren aan vertices zodat verbonden vertices een verschillende kleur hebben. Voor onze situatie gebruiken we een 3-kleuring, elke vertex mag dus een van die drie kleuren hebben. Zo en kleurring kan gemakkelijk gevonden worden door telkens een driehoek te halen uit de triangulatie, elke keer als die driehoek terug toegevoegd moet worden zal de nieuwe hoek die nog geen kleurring heeft, eenduidig bepaald een van de drie kleuren bevatten. Na het kleuren van de vertices kan je dan besluiten een van de kleuren te kiezen om dan de bewakers daar te positioneren. Het is ergens wel logisch dat er van sommige kleuren meer zijn dan anderen, net zoals hiernoder te zien is. 
 	\begin{figure}[h]
 		\centering
-		\subfigure[]{\includegraphics[width=0.32\textwidth]{afbeeldingen/triangulatie-rood}} 
-		\subfigure[]{\includegraphics[width=0.32\textwidth]{afbeeldingen/triangulatie-groen}} 
-		\subfigure[]{\includegraphics[width=0.32\textwidth]{afbeeldingen/triangulatie-blauw}}
+		\subfigure{\includegraphics[width=0.32\textwidth]{afbeeldingen/triangulatie-rood}} 
+		\subfigure{\includegraphics[width=0.32\textwidth]{afbeeldingen/triangulatie-groen}} 
+		\subfigure{\includegraphics[width=0.32\textwidth]{afbeeldingen/triangulatie-blauw}}
 		\label{fig:trianuglation-colours}
 	\end{figure}
 	Het is hier duidelijk dat rood en blauw elk een goeie verdeling hebben, maar ook niet allebei optimaal. Bij beiden zou er nog een bewaker kunnen wegvallen en zou heel het oppervlak nog steeds bewaakt zijn. Gezien dit een 3-kleuring is, wordt elke kleur maximaal $n/3$ keer gebruikt en vermits $n$ geheel is: $\lfloor n/3 \rfloor$. Een goede voorstelling hiervan is ook Chvátal's kam. 
@@ -433,8 +433,8 @@
 		Om te zoeken naar een interval, zal men de boom moeten aflopen. Elke knoop zal een extra grensniveau aanduiden en dus een kleinere regio definiëren. Hieronder volgen een goed visueel voorbeeld en de pseudocode voor dit algoritme. 
 		\begin{figure}[h]
 			\centering
-			\subfigure[]{\includegraphics[width=0.40\textwidth]{afbeeldingen/kd-bomen/zoeken-voorbeeld}} 
-			\subfigure[]{\includegraphics[width=0.40\textwidth]{afbeeldingen/kd-bomen/pseudocode}} 
+			\subfigure{\includegraphics[width=0.40\textwidth]{afbeeldingen/kd-bomen/zoeken-voorbeeld}} 
+			\subfigure{\includegraphics[width=0.40\textwidth]{afbeeldingen/kd-bomen/pseudocode}} 
 			\label{fig:kd-zoeken}
 		\end{figure}
 		\item[efficiëntie]:\\
@@ -452,8 +452,8 @@
 	Voor grotere dimensies voel je aan dat er dan per knoop nog extra dimensies zullen volgen. Elk punt zal maximaal 1 keer opgeslagen zijn in de boom $\rightarrow O(n)$ per niveau. Per punt zijn er dan $P(\log(n))$ niveaus  waarop het punt wordt opgeslagen. Het geheugen zal hier dus $O(n\log(n))$ zijn. De pseudocode voor het opbouwen en het zoeken zijn hieronder gegeven: 
 	\begin{figure}[H]
 		\centering
-		\subfigure[]{\includegraphics[width=0.49\textwidth]{afbeeldingen/kd-bomen/rangetree-build}} 
-		\subfigure[]{\includegraphics[width=0.49\textwidth]{afbeeldingen/kd-bomen/rangetree-zoeken}} 
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/kd-bomen/rangetree-build}} 
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/kd-bomen/rangetree-zoeken}} 
 		\label{fig:range-treees-pseudocode}
 	\end{figure}
 
@@ -578,9 +578,9 @@
 		\item[Groeiende cirkels]: De voronoi cellen zijn cirkels die vanuit een site starten om groter te worden en uiteindelijk de voronoi edges te bepalen. Hieronder volgt een visualisatie: 
 		\begin{figure}[h]
 			\centering
-			\subfigure[]{\includegraphics[width=0.32\textwidth]{afbeeldingen/voronoi/groeiende-cirkels-first}} 
-			\subfigure[]{\includegraphics[width=0.32\textwidth]{afbeeldingen/voronoi/groeiende-cirkels-second}} 
-			\subfigure[]{\includegraphics[width=0.32\textwidth]{afbeeldingen/voronoi/groeiende-cirkels-third}}
+			\subfigure{\includegraphics[width=0.32\textwidth]{afbeeldingen/voronoi/groeiende-cirkels-first}} 
+			\subfigure{\includegraphics[width=0.32\textwidth]{afbeeldingen/voronoi/groeiende-cirkels-second}} 
+			\subfigure{\includegraphics[width=0.32\textwidth]{afbeeldingen/voronoi/groeiende-cirkels-third}}
 			\label{fig:groeiende-cirkels-voorbeeld}
 		\end{figure}
 		\item[Groeiende kegels]: Hetzelfde concept als de cirkels maar er is nu ook de tijdsmeting op de z-as. Het uiteindelijke resultaat wordt dan op het xy-vlak geprojecteerd. 
@@ -592,8 +592,8 @@
 	Het golffront is de projectie van de parabolische snijding op het xy-vlak van de kegel met het schuin doorloopvlak. Deze projectie vormt een parabool op het vlak. Telkens als deze doorlooplijn een nieuwe site tegenkomt, zal een nieuwe parabool deel worden van het golffront. Hieronder vind je nog een visualisatie van zo'n golffront met een afbeelding die toont hoe de parabool wordt gemaakt. 
 	\begin{figure}[H]
 		\centering
-		\subfigure[]{\includegraphics[width=0.39\textwidth]{afbeeldingen/voronoi/golffront-parabool}} 
-		\subfigure[]{\includegraphics[width=0.59\textwidth]{afbeeldingen/voronoi/golffront-front}} 
+		\subfigure{\includegraphics[width=0.39\textwidth]{afbeeldingen/voronoi/golffront-parabool}} 
+		\subfigure{\includegraphics[width=0.59\textwidth]{afbeeldingen/voronoi/golffront-front}} 
 		\label{fig:golffrront-parabool}
 	\end{figure}
 	
@@ -646,10 +646,23 @@
 		\includegraphics[width=0.9\linewidth]{afbeeldingen/voronoi/voronoi-diagramma}
 		\label{fig:voronoi-diagramma}
 	\end{figure}
+
+	De operaties op het golffront zullen elk $O(\log(n))$ hebben als tijdscomplexiteit. Er zijn $n$ site-events en maximaal $2n-5$ cirkel-events. De totale complexiteit zal dus uiteindelijk $O(n\log(n))$ zijn. 
 	
 	
-	\subsection{Hogere orde voronoi-diagrammen}
-	Er bestaan ook hogere orde diagrammen. Een 2e orde is bijvoorbeeld de twee dichtstbijzijnde buren voor een bepaald punt in de ruimte. Deze orde kan groter en groter worden tot de $n-1$ste orde (met n het aantal sites). Deze laatste wordt ook wel het \textit{verste punt diagramma} genoemd, gezien het dan kijken naar wat het verste ligt voor een punt. Er volgt dan ook nog een klein voorbeeld waarbij naarmate je andere functies voor de afstand kiest, je diagram er anders kan uitzien. 
+	\subsection{Verdere uitbreidingen}
+	\begin{description}
+		\item[Diagram van lijnsegmenten]: De edges zijn da lijnsegmenten of paraboolsegmenten en we veronderstellen voor dit algoritme geen samenvallende punten. Het algoritme zal heel erg analoog zijn, er zullen gewoon meer scenario's zijn bij breekpunten. 
+		\item[Toepassing: padplanning]: Een robot kan zich verplaatsten volgens de voronoi-edges en zal zo niet botsen met de sites/obstakels. 
+		\item[Hogere orde diagrammen]: Er bestaan ook hogere orde diagrammen. Een 2e orde is bijvoorbeeld de twee dichtstbijzijnde buren voor een bepaald punt in de ruimte. Deze orde kan groter en groter worden tot de $n-1$ste orde (met n het aantal sites). Deze laatste wordt ook wel het \textit{verste punt diagramma} genoemd, gezien het dan kijken naar wat het verste ligt voor een punt. Alle cellen van dit diagram zullen onbegrensd zijn. Het opstellen van deze constructie moet incrementeel gebeuren. Een mooie visualisatie hiervan:
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.9\linewidth]{afbeeldingen/voronoi/hogere-orde}
+			\label{fig:hogere-orde}
+		\end{figure}
+		
+		Er volgt dan ook nog een klein voorbeeld waarbij naarmate je andere functies voor de afstand kiest, je diagram er anders kan uitzien.
+	\end{description} 
 	
 	
 	\subsection{Typische examenvragen}
@@ -666,7 +679,76 @@
 	
 	
 	\section{Delaunay Triangulatie}
+	Deze triangulaties komen uit het probleem: hoe interpoleer je de hoogte van een punt tegenover de omliggende punten. Een naïve manier om dit op te lossen is door een voronoi-diagram te maken en voor elke cel is de hoogte van die cel gelijk aan de hoogte van de site. Een andere manier is om voor elk punt de gemiddelde hoogte van de buren te pakken. Je voelt onmiddelijk aan dat deze technieken niet altijd een correct beeld zullen geven van een 3D terrein. Een betere oplossing is door de ruimte te trianguleren tussen de punten en er lineaire interpolatie bij toe te passen. 
 	
+	Een triangulatie is niet eenduidig bepaald en er zijn dus logish triangulaties die beter geschikt zijn dan anderen. Een goede manier om een goede triangulatie te bepalen is bijvoorbeeld zeggen dat de lengte van de zijdes van de driehoek even lang moeten zijn (of zo gelijk mogelijk) of dat de hoeken allemaal zo dicht mogelijk bij 60°. Dit is allemaal heel 'hard-coded' en zou niet altijd het meest efficient kunnen zijn. Een vaste regel kan dus zijn: \textit{De minimale hoek van alle driehoeken moet gemaximaliseerd zijn.}
+	
+	
+	\subsection{Triangulatie van een puntenset}
+	De triangulatie van punten is \textit{the maximal planar subdivision}. Triangulaties hebben een aantal eigenschappen: 
+	\begin{itemize}
+		\item Er kunnen geen edges meer toegevoegd worden zonder andere edges te snijden. 
+		\item Veelhoeken kunnen telkens verder gesplitst worden in driehoeken
+		\item De edges van de convex imhullende zijn steeds deel van de triangulatie.
+	\end{itemize}
+
+	Deze triangulaties zullen altijd $2n - 2 - k$ driehoeken hebben met $n$ het aantal punten en met $k$ het aantal punten op de convex omhullende. Ze zullen ook altijd $3n - 3 - k$ edges hebben met dezelfde parameters. Het bewijs kan gemakkelijk gevonden worden aan de hand van de formule van Euler. 
+	
+	Stel $T(p)$ een triangulatie van p met m driehoeken, de \textit{Angle vector} $A(T)$ waarbij het een vector is met de hoeken van die triangulatie gesorteerd van klein naar groot. Stel dan een andere triangulatie voor $T'(p)$. $T(p)$ is de \textit{angle optimal} wanneer voor alle alternatieve $T'(p)$ geldt dat: $A(T) > A(T')$. Een triangulatie kan geoptimalisseerd worden door een edge flip uit te voeren, zoals hieronder te zien is: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\linewidth]{afbeeldingen/delaunay/edge-flip}
+		\label{fig:edge-flip}
+	\end{figure}
+
+	Zo'n edge flip wordt gebruikt wanneer door het wisselen van een edge, de Angle vector optimaler kan worden. Een edge is dus illegaal wanneer de angle vector van een alternatieve triangulatie beter is dan de huidig en dit door een edge flip gebeterd kan worden. Een illegale edge kan gedetecteerd worden door middel van en eigenschap met cirkels. De eigenschap staat hieronder geïllustreerd met een voorbeeld: 
+	\begin{figure}[H]
+		\centering
+		\subfigure{\includegraphics[width=0.47\textwidth]{afbeeldingen/delaunay/illegal-edge}} 
+		\subfigure{\includegraphics[width=0.51\textwidth]{afbeeldingen/delaunay/illegal-edge2}} 
+		\label{fig:illegal-edges}
+	\end{figure}
+
+	Het berekenen van een legale triangulatie zal als volgt verlopen: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{afbeeldingen/delaunay/legalTranslation}
+		\label{fig:legaltranslation}
+	\end{figure}
+
+	Dit algoritme zal ook eindigen: er is een eindig aantal triangulaties, therefore een eindig aantal keer dat dit algoritme kan lopen om alle illegale edges te verwijderen. 
+	
+	
+	\subsection{Delaunay triangulaties}
+	Deze triangulatie zal eerst het voronoi diagram opstellen van de punten waarmee de triangulatie gemaakt moet worden. Dan wordt de duale graaf gemaakt van dit diagram met als edges telkens de connectie tussen twee buren in het voronoi diagram. De \textit{Delaunay} is dan het gebruik maken van die duale graaf door er rechte lijnen van de maken. Het is dan ook duidelijk uit deze constructie dat de Delaunay graaf een vlakke graaf zal zijn (er zijn geen edges die elkaar snijden), dit is af te leiden uit een van de eigenschappen van het voronoi deel. Hier volgen een aantal eigenschappen waarvoor ik te lui ben om ze op te schrijven B): 
+	
+	\begin{figure}[H]
+		\centering
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/delaunay/theorem1}} 
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/delaunay/theorem2}} 
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/delaunay/theorem3}} 
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/delaunay/theorem4}} 
+		\label{fig:delaunay-theorems}
+	\end{figure}
+	\begin{description}
+		\item[Constructie]: Hier zijn ook weer een aantal opties, maar uiteindelijk zal een RIC zorgen voor een efficiënt algoritme. Het toevoegen van een nieuw punt zal maar lokaal veranderingen veroorzaken, wat dus logisch lijkt te leiden tot een kleine tijdscomplexiteit. 
+		
+		Het algoritme begint met het verbinden van de drie punten die (als verbonden) in hun driehoek alle andere punten omvat. Na deze stap kunnen er twee soorten toevoegingen gebeuren: ofwel wordt een puntin een driehoek toegevoegd, ofwel wordt een punt toegevoegd dat op een edge ligt. In het eerste geval moeten er edges naar de vertices van deze driehoek getrokken worden en in het tweede geval moeten er twee edges naar de uiterste vertices getrokken worden. Na deze operatie moet ter plekke telkens nagekeken worden of de triangulatie legaal is. De pseudocode kan je hieronder vinden: 
+		\begin{figure}[H]
+			\centering
+			\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/delaunay/delaunayTriangulatie1}} 
+			\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/delaunay/delaunayTriangulatie2}} 
+			\subfigure{\includegraphics[width=0.50\textwidth]{afbeeldingen/delaunay/legalizeEdge}} 
+			\label{fig:delaunay-constructie}
+		\end{figure}
+		
+		Hoe weten we nu in welke driehoek een punt ligt? Dit kunnen we doen door een zoekstructuur (een soort graaf bijvoorbeeld). Een ander probleem is de eerste drie punten bepalen. We kunnen ook zelf twee punten 'uitvinden' die ver genoeg liggen en telkens deze punten betrokken zijn ervoor zorgen dat deze niet in de triangulatie komen. Op die manier bekomen we wel nog een correct resultaat. 
+		
+		\item[Analyse]: 
+		De afleiding voor deze tijd en ruimte complexiteit moeten we (YES) niet kennen! Het geheugen zal als complexiteit $O(n)$ hebben. De uitvoeringstijd van een puntlocatiestap hangt af van hoeveel driehoeken we moeten overlopen om te vinden waar het punt ligt en per driehoek moet dan bepaald worden hoeveel punten in de omhullende cirkel liggen. Uiteindelijk komen we uit op, het alomgekende: $O(n\log(n))$. 
+	\end{description}
+	
+	Voor dit algoritme zijn er natuurlijk een aantal toepassingen, zoals ray tracing (cool ze). 
 	
 	
 	\subsection{Typische examenvragen}
@@ -681,6 +763,99 @@
 	
 	
 	\section{Béziercurven}
+	Dit deel is gebaseerd op te zoeken naar een curve dat een aantal punten volgt. 
+	
+	
+	\subsection{Interpolerende veeltermcurven}
+	Deze veeltermcurve zal gegeven n+1 punten een curve maken voor de punten p met als parameterwaarde u (gaande van 0 tot n). De curve zal dus afhankelijk zijn van alle punten en een kleine wijziging zal heel de curve aanpassen. Dit is in het algemeen nadelig aangezien de curves plaatselijk aanpassen wel een handige tool is. De curve volt ook de punten niet volledig, het is heel uiteenlopend. Het is duidelijk dat dit niet echt fantastisch is. 
+	
+	
+	\subsection{Lagrange veeltermen}
+	Deze veelterm gaat zich baseren op de veeltermcurve en zal bestaan uit volgende vergelijking: 
+	\[L_i^n(u) = \prod_{k = 0, k \neq i}^{n} \frac{u - u_k}{u_i - u_k}, 0 \leq i \leq n\]
+	Met i de 'i-de' Lagrangeveelterm van de n-de graad. Hier volgen ook een aantal eigenschappen bij: 
+	\[L_i^n(u_i) = 1, L_i^i(u_j) = 0, j \neq i\]
+	\[\sum_{k = 0}^{n} L_k^n(u) = 1, \forall u \in [u_0, u_n]\]
+	
+	Er volgt ook nog een visualisatie om te snappen wat die eigenschappen inhouden: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{afbeeldingen/Beziercurven/Lagrange-veelterm-voorbeeld}
+		\label{fig:lagrange-veelterm-voorbeeld}
+	\end{figure}
+
+	Een gevolg van deze eigenschappen: 
+	\[\sum_{k = 0}^{n} x_k L_k^n(u_i) = x_i\]
+	Waarbij alle 'u-waarden' gelijk zijn aan 0. Met dit gevolg kan het verloop volgens de x-as en de y-as dan gemaakt worden. 
+	
+	We kunnen deze curven op 2 manieren interpreteren: 
+	\begin{itemize}
+		\item De curve is een gewogen zom vqn Lagrangeveeltermen met 'vector'-coëfficiënten $\rightarrow$ n-de graads, continu, ...
+		\item Elk punt op de curve is een affiene combinatie van punten $p_j$ met als gewichten de Lagrange-veeltermen, geëvaueerd in parameterwaarde u, want \(\sum_{k=0}^{n} L_k^n(u) = 1, \forall u \in [u_0, u_n] \)
+	\end{itemize}
+
+	Het voordeel is dat de curve zal interpoleren door de gegeven punten maar anderzijds zal de curve oscilleren tussen interpolatiepunten en dit effect zal ook erger worden bij meer punten. Zoals hierboven gezegd is het curveverloop ook heel gevoelig aan verplaatsingen, waar ook niet wenselijk is. 
+	
+	
+	\subsection{Béziercurven}
+	Dit is een curve die, ongelijk de interpolerende veeltermcurven, de punten gebruikt als controlepunten wat zorgt voor een zachter verlopende curve. We spreken hier ook over een \textit{controleveelhoek}: die veelhoek die gespannen wordt door de controlepunten. Nu zoeken we nog enkel een verband tussen de curve en de controlepunten. Voor $n+1$ controlepunten zullen er $n$ Bézierpunten zijn. We definiëren een parameter $t\in [0, 1] $. Om de Béziercurve op te stellen hebben we \textit{Berstein-veeltermen} nodig van graag n. Deze worden eerst uitgelegd voor we verdergaan met de Béziercurven. 
+	
+	\subsubsection*{Berstein veeltermen}
+	Deze veeltermen zien er als volgt uit: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{afbeeldingen/Beziercurven/Bernstein}
+		\label{fig:bernstein}
+	\end{figure}
+
+	Bij deze veeltermen horen ook een groot aantal eigenschappen: 
+	\begin{itemize}
+		\item \begin{figure}[H]
+			\centering
+			\includegraphics[width=0.9\linewidth]{afbeeldingen/Beziercurven/Eigenschap1}
+			\label{fig:eigenschap1}
+		\end{figure}
+		\item 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.9\linewidth]{afbeeldingen/Beziercurven/Eigenshap2}
+			\label{fig:eigenshap2}
+		\end{figure}
+		\item 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.9\linewidth]{afbeeldingen/Beziercurven/Eigenschap3}
+			\label{fig:eigenschap3}
+		\end{figure}
+		\item 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.9\linewidth]{afbeeldingen/Beziercurven/Eigenschap4}
+			\caption{}
+			\label{fig:eigenschap4}
+		\end{figure}
+		\item 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.9\linewidth]{afbeeldingen/Beziercurven/Eigenschap5}
+			\label{fig:eigenschap5}
+		\end{figure}
+		\item 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.9\linewidth]{afbeeldingen/Beziercurven/Eigenschap6}
+			\label{fig:eigenschap6}
+		\end{figure}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.9\linewidth]{afbeeldingen/Beziercurven/Eigenschap7}
+			\caption{}
+			\label{fig:eigenschap7}
+		\end{figure}
+	\end{itemize}
+	
+	
+	
 	\subsection{Typische examenvragen}
 	\begin{itemize}
 		\item \textbf{Gegeven een curve met enkele controlepunten met bijhorende curve: is dit (vermoedelijk) een Béziercurve? Waarom wel, waarom niet? Welke eigenschappen gebruik je om dit te achterhalen?:}\\
