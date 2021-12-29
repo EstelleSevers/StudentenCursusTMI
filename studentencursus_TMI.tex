@@ -588,8 +588,68 @@
 	\end{description}
 	
 	
-	%TODO problemen voor morgenl ol yeet
-	\subsection{Het golffront}	
+	\subsection{Het golffront}
+	Het golffront is de projectie van de parabolische snijding op het xy-vlak van de kegel met het schuin doorloopvlak. Deze projectie vormt een parabool op het vlak. Telkens als deze doorlooplijn een nieuwe site tegenkomt, zal een nieuwe parabool deel worden van het golffront. Hieronder vind je nog een visualisatie van zo'n golffront met een afbeelding die toont hoe de parabool wordt gemaakt. 
+	\begin{figure}[H]
+		\centering
+		\subfigure[]{\includegraphics[width=0.39\textwidth]{afbeeldingen/voronoi/golffront-parabool}} 
+		\subfigure[]{\includegraphics[width=0.59\textwidth]{afbeeldingen/voronoi/golffront-front}} 
+		\label{fig:golffrront-parabool}
+	\end{figure}
+	
+	Zoals hierboven zichtbaar, zal ekle site zo een parabool bepalen, de theorie achter zo'n parabool is dat die nooit dichter bij een site onder de doorlooplijn kan zitten dan bij de site die de parabool maakt. Het golffront scheidt het gekende en het ongekende deel van het Voronoi-diagramma en wijzigt ook naarmate de doorlooplijn vordert. 
+	
+	Het is ook zichtbaar dat de breekpunten (snijpunt tussen twee parabolen) een voronoi-edge bepalen. Voor dit algoritme zullen ook een aantal belangrijke concepten besproken worden: 
+	
+	\begin{description}
+		\item[Status golffront]: Gesorteerde sequentie vqn paraboolsegmenten: Breekpunten knopen, sites bladeren. 
+		\item[Event queue]: Doorlooplijn stopt bij een nieuwe voronoi-site en wanneer een breekpunt het einde van een voronoi-edge bereikt. 
+		\item[Site event]: Wanneer de doorlooplijn een site tegenkomt, zal deze een nieuwe parabool toevoegen aan het golffront, dit gaat aanvankelijk een verticale lijn zijn maar zal breder worden naarmate de doorlooplijn vordert. De twee nieuwe breekpunten die deze site veroorzaken zullen op dezelfde locatie starten en dan van mekaar weg bewegen. Voor duidelijkheid volgt een visualisatie: 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{afbeeldingen/voronoi/site-event}
+			\label{fig:site-event}
+		\end{figure}
+	
+		Het golffront zal ten allen tijde maximaal uit $2n-1$ paraboolsegmenten bestaan. Dit komt omdat er maar zoveel parabolen kunnen zijn als site-events en dat door het toevoegen van een paraboolsegment, een ander segment in 2 kan worden gesplitst. Hier komt de $2n$ dus natuurlijk vandaan. De -1 is aangezien dat er altijd een segment zal zijn dat niet in 2 is gedeeld, gezien dat dat net andere segmenten in twee heeft gedeeld. Hieronder volgt de pseudovode voor dit algoritme: 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.8\linewidth]{afbeeldingen/voronoi/handleSiteEvent}
+			\label{fig:handlesiteevent}
+		\end{figure}
+		
+		\item[Cirkel-event]: Dit event wordt getriggered wanneer er twee breekpunten samenkomen. Op het moment dat ze samenkomen zal een cirkel gevormd worden met 3 sites op de rand. De cirkel moet op dat moment ook de doorlooplijn raken en moet ook leeg zijn (er mogen geen voronoi sites inzitten die bijvoorbeeld onder de doorlooplijn liggen). Het centrum van die cirkel is dan de voronoi-vertex en dan zal het golffront als breekpunt van twee paraboolsegmenten verdergaan. Dit event is de enige manier om een paraboolsegment te laten verdwijnen. Hieronder volgt een visualisatie: 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{afbeeldingen/voronoi/cirkel-event}
+			\label{fig:cirkel-event}
+		\end{figure}
+		Het bepalen van deze cirkels lijkt een vrij moeilijk gegeven, om het te versimpelen kan er voor elk trio aan buren bijgehouden worden wat de cirkel is die zij definiëren. Dit betekent niet dat elk van deze cirkels een cirkel-event zal trigeren, sommigen kunnen namelijk een 'false alarm' zijn. Het onderste deel van de cirkel kan dan ook een event zijn om na te kijken of deze cirkel geldig is en effectief een voronoi-vertex definieert. Ook hier hoort pseudocode bij: 
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.8\linewidth]{afbeeldingen/voronoi/handeCircleEvent}
+			\label{fig:handecircleevent}
+		\end{figure}
+		
+	\end{description}
+	De constructie van het voronoit diagramma zal dus bestaan uit een golffront dat uitgebreid wordt als een site bereikt wordt en ingekrompen wordt als een cirkel-event plaatsvindt. 
+	
+	Voor dit algoritme zullen ook een aantal datastructuren nodig zijn: 
+	\begin{description}
+		\item - Het voronoi-diagramma zal gemaakt worden uit een DCEL. 
+		\item - De event queue moet bestaan uit een gesorteerde lijst site-events. De cirkels moeten gedetecteerd worden voor 3 opeenvolgende paraboolsegmenten. Dit betekent niet dat elk trio een bruikbare cirkel definiëren. Telkens een site-event plaatsvindt zijn er 3 mogelijke nieuwe tio's voor de cirkel: een links, een midden en een rechts. Als dit tripel aanleiding geeft tot een cirkel event wordt dit toegevoegd aan de event queue. 
+		\item - Het golffront zelf moet bestaan uit een gebalanceerde zoekboom. Hier zijn de bladeren de paraboolsegementen (van links naar rechts in de boom) en elk blad bevat ook de site waarbij dat segment hoort. De interne knopen van de boom zijn de breekpunten $\rightarrow$ Gegeven een nieuw site-event kunnen we gemakkelijk in $\log(n)$ tijd het paraboolsegment vinden dat boven deze nieuwe site ligt. 
+	\end{description}
+	Hieronder volgt de code voor de constructie nog, met een oproep naar HandleSiteEvent en een oproep naar HandleCircleEvent. 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\linewidth]{afbeeldingen/voronoi/voronoi-diagramma}
+		\label{fig:voronoi-diagramma}
+	\end{figure}
+	
+	
+	\subsection{Hogere orde voronoi-diagrammen}
+	Er bestaan ook hogere orde diagrammen. Een 2e orde is bijvoorbeeld de twee dichtstbijzijnde buren voor een bepaald punt in de ruimte. Deze orde kan groter en groter worden tot de $n-1$ste orde (met n het aantal sites). Deze laatste wordt ook wel het \textit{verste punt diagramma} genoemd, gezien het dan kijken naar wat het verste ligt voor een punt. Er volgt dan ook nog een klein voorbeeld waarbij naarmate je andere functies voor de afstand kiest, je diagram er anders kan uitzien. 
 	
 	
 	\subsection{Typische examenvragen}
@@ -606,6 +666,9 @@
 	
 	
 	\section{Delaunay Triangulatie}
+	
+	
+	
 	\subsection{Typische examenvragen}
 	\begin{itemize}
 		\item \textbf{Leg het verband uit tussen het Voronoi-diagramma van een puntenset en de Delaunay triangulatie van diezelfde puntenset:}\\
