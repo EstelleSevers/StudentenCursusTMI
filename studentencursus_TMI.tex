@@ -962,8 +962,90 @@
 	\end{itemize}
 	
 	
+	
 	\section{Binairy Space partitions}
 	%The spiderman one
+	Probleemstelling: het opsplitsen van de ruimte. Dit kan je doen door de ruimte telkens verder en verder in twee te delen totdat elke blad een voorwerp bevat. Dit algoritme noemt men het \textit{Painter's algoritme} en het maakt gebruik van een binairy partition tree (BSP tree) en is eigenlijk een veralgemening van een Kd-boom. 
+	
+	Zo'n boom kan dan gebruikt worden om een punt in een ruimte te bepalen, om de intersectie met het dichtste object te bepalen voor een bepaalde 'ray' en nog veel andere toepassingen. 
+	
+	We overlopen een aantal definities: 
+	\begin{itemize}
+		\item Wanneer er maar 1 object in de ruimte staat, bestaat de BSP uit 1 blad. 
+		\item Zodra er meer dan 1 object is, zal elke knoop een \textit{hypervlak} stockeren (een deel van de ruimte), eventueel samen met de objecten gelegen in het vlak. 
+		\item Objecten kunnen ook in de knoop van een boom liggen. 
+		\item De omvang van de boom is gelijk aan het aantal objecten in alle sets van knopen. 
+		\item Een knoop zal altijd een convex gebied definiëren. 
+		\item \textit{Auto-partitionering} is het verdelen van de ruimte op basis van de objecten in de ruimte. Dus niet gewoon telkens ruimte perfect in twee delen, maar nadenken enzo! 
+	\end{itemize}
+	Hieronder volgt wat pseudocode voor het algoritme: 
+	\begin{figure}[H]
+		\centering
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/BSP-bomen/paintersAlgoritme}} 
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/BSP-bomen/2DBSP}} 
+		\label{fig:BSP-pseudocode}
+	\end{figure}
+	Deze constructie kan natuurlijk nog geoptimaliseerd worden. Een \textit{free split} is een segment wiens extensie binnen het deelvlak geen andere segmenten snijdt. In het algemeen zullen we dus langs een free split de ruimte willen delen om de grootte van de BSP boom ook te mindere. 
+	
+	\textit{Lemma}: Er wordt verwacht dat het algoritme 2DrandomBSP een aantal fagmenten genereert in $O(n\log(n))$. Het bewijs hiervoor: 
+	\begin{figure}[H]
+		\centering
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/BSP-bomen/Constructie1}} 
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/BSP-bomen/Constructie2}} 
+		\label{fig:BSP-constructie}
+	\end{figure}
+
+	Voor elke splitsing overlopen we aantal segmenten/fragmenten in (deelboom) $\rightarrow$ maximaal $n$ segmenten. Het aantal recursieve oproepen is begrensd door het aantal fragmenten $O(n\log(n))$. De tijdscomplexiteit voor het maken van de BSP boom is dus $O(n^2\log(n))$. 
+	
+	De constructie is analoog voor een 3D ruimte met objecten. Voor enige set van n niet-snijdende driehoeken in 3D is er een BSP boom van grootte $O(n^2)$. Er zijn zelfs configuraties waarrbij de grootte van de BSP $\Omega(n^2)$ is. 
+	
+	\subsection{Lage densiteit-scènes}
+	Als objecten ver van mekaar liggen in een ruimte, kunnen we een betere BSP boom opstellen. De densiteit $\lambda$ van een set objecten kunnen we bepalen als de laagste waarde van $\lambda$ zodat elke willekeurige bol B maximaal $\lambda$ aantal objecten snijdt met de diameter van de objecten > de diameter van de bol. 
+	
+	Een idee is door 'guards' te gebruiken of representatieve punten van het object. Voor een scene met een lage densiteit kunnen we zelfs een omsluitende rechthoek gebruiken. We plaatsen rond elk object een bounding box (de guards zijn dan de 4 punten van de bounding box). $G(S)$ is dan de verzameling van alle guards van alle objecten. Hieronder eerst een lemma rond de guards: 
+	\begin{figure}[H]
+		\centering
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/BSP-bomen/lemma1}} 
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/BSP-bomen/lemma2}} 
+		\label{fig:BSP-lemmalol}
+	\end{figure}
+	Om een lage densiteit BSP te construeren beginnen we door een vierkant te definiëren dat de volledige scene omvat. De constructie zal uit twee fases bestaan: 
+	\begin{enumerate}
+		\item In de eerste fase zal het vierkant recursief opgesplitst worden in kleinere quadranten, zodat elk quadrant maximaal één guard bevat. Elke blaknoop in de resulterende boom bevat maximaal $1+4\lambda$ objecten. 
+		\item Elke bladknoop zal verder opgesplitst worden tot alle objecten gescheiden zijn. 
+	\end{enumerate}
+	Een probleem hiermee is dat men soms heel slechte opsplitsingen kunnen krijgen, om die op te lossen bestaan er twee ideëen: 
+	\begin{enumerate}
+		\item Het eerste idee is om het totaal aantal guards op te splitsen per regio, op deze manier is alles gelijk verdeeld.
+		\item Indien er exact één kwadrant is met meer dan k objecten, komt er een krimpstap. Het bewust quadrant zal dan gekrompen worden zodat er in dat deel toch maximaal k objecten zitten. 
+	\end{enumerate}
+	Na dit deel volgen vooral veel stellingen en veel pseudocode, die ik hieronder lever als slides. 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{afbeeldingen/BSP-bomen/phase1}
+		\label{fig:phase1}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/BSP-bomen/phaselemma1}} 
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/BSP-bomen/phaselemma2}} 
+		\label{fig:BSP-phaselemma}
+	\end{figure}
+	De finale constructie zal er bij grote k als volgt uitzien: Het aantal bladknopen is klein = $O(n/k)$. Er zal wel een groot aantal objecten zijn per bladknoop $k+4\lambda$.
+	
+	Voor een $k = \lambda$ geldt dat het aantal bladknopen klein is in vergelijking met $k=1$. Het aantal objecten per bladknoop zal daarentegen $5\lambda$ zijn. 
+	
+	Nu is de vraag: hoe bepalen we k? Begin willekeurig met k = 2 en zo als we niet met 5k objecten zitten (maximaal) in de knopen verdubbelen we de waarde van k. 
+	
+	\begin{figure}[H]
+		\centering
+		\subfigure{\includegraphics[width=0.44\textwidth]{afbeeldingen/BSP-bomen/lowdensitybsp}} 
+		\subfigure{\includegraphics[width=0.54\textwidth]{afbeeldingen/BSP-bomen/lastlemma}} 
+		\label{fig:fcking-labels}
+	\end{figure}
+	
+	
+	
 	\subsection{Typische examenvragen}
 	\begin{itemize}
 		\item \textbf{Wat is een Binary Space Partioning boom?:}\\
@@ -975,4 +1057,61 @@
 	
 	
 	\section{Motion planning \& Visibility graphs}
+	Probleemstelling: Hoe moet een robot bewegen van punt A naar punt B zonder obstakels te raken en enkel via translatiebeweging (geen rotaties). 
+	
+	We definiëren een \textit{configuratieruimte} waarbij de hindernissen in die ruimte 'configuratiehindernissen' worden als in: De obstakels worden in die ruimte vergroot zodat als de robot wordt voorgesteld als een punt, deze nog steeds kan voorstellen waar de robot kan bewegen. Hieronder een illustratie voor duidelijkheid: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{afbeeldingen/Motion-plannine/configuratieruimte}
+		\label{fig:configuratieruimte}
+	\end{figure}
+	De vorm van de configuratieruimte zal dus logischerwijze afhangen van de vorm van de robot. 
+	
+	Stel $R(x, y)$ de robot op plek (x, y), $C(R)$ de configuratieruimte die gebaseerd is op de werkruimte. We noemen $S = \{P_1, P_2, ..., P_t\}$, de verboden configuratieruimte $C_{forb}(R, S)$ en de vrije configuratieruimte $C_{free}(R, S)$. 
+	
+	
+	\subsection{Puntrobot}
+	We beginnen met dit deel door ervan uit te gaan de de robot een puntrobot is. Rond de obstakels construeren we een \textit{bounding box} B en de vrije ruimte is dan alles binnen deze bounding box buiten de obstakels. Om de beweging binnen de vrije ruimte te bepalen, kunnen we een trapezium map gebruiken. Het bepalen van de vrije ruimte staat hieronder in pseudocode: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{afbeeldingen/Motion-plannine/computeFreeSpave}
+		\label{fig:computefreespave}
+	\end{figure}
+	Het is duidelijk dat men de trapezium map eerst zal moeten maken om dan het deel van de map in de obstakels weg te halen. Het bepalen van deze trapezium map gebeurt in $O(n\log(n))$ met een gerandomiseerd algoritme. Zodra die is gebeurd kan er een weg gemaakt worden rond de obstakels, dit doen we volgend een paar regels. 
+	
+	We bepalen eerst de knopen: Elk centrum van een trapezium stelt een knoop voor en het midden van elk lijnstuk stelt ook een knoop voor. Deze knopen worden dan elk verbonden en dit zal een graaf geven: de \textit{road map} $G_{road}$. 
+	
+	Een probleem met deze graaf is dat een punt niet altijd op de voorafgaande gekozen knopen zal liggen. Dit kan opgelost worden door vanuit het startpunt een lijn te trekken naar de dichtsbijzijnde knoop en hetzelfde geldt voor het eindpunt. Zo komen we op volgende visualisatie, die wat meer uitleg biedt: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\linewidth]{afbeeldingen/Motion-plannine/puntrobot}
+		\label{fig:puntrobot}
+	\end{figure}
+	Bij dit algoritme hoort ook nog de pseudocode en de tijdscomplexiteit:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{afbeeldingen/Motion-plannine/computePath}
+		\label{fig:computepath}
+	\end{figure}
+	 	
+	
+	\subsection{Schijfrobot}
+	Een schijfrobot is eigenlijk een robot die als centrum het punt heeft en dan een cirkel rond zich. Deze zal dus rond een obstakel op elk moment eenzelfde afstand van de rand moeten zitten. In de configuratieruimte breiden we het obstakel dan zo uit dat we de theorie van de puntrobo opnieuw kunnen gebruiken. Hier is niet veel meer over gezegd, enkel dat een robot nooit mooi rond is in het echt en we dus een andere oplossing moeten zoeken. Hieronder is nog een visualisatie voor duidelijkheid: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.6\linewidth]{afbeeldingen/Motion-plannine/schijfrobot}
+		\label{fig:schijfrobot}
+	\end{figure}
+	
+	
+	\subsection{Minkowski som}
+	Een obstakel in de configuratieruimte is eigenlijk 
+	
+	
+	\subsection{Bewegingsplannen met rotatie}
+	
+	
+	\subsection{Visibiliteitsgrafen}
+	
+	
 \end{document}
