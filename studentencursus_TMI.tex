@@ -1105,13 +1105,100 @@
 	
 	
 	\subsection{Minkowski som}
-	Een obstakel in de configuratieruimte is eigenlijk 
+	Een obstakel in de configuratieruimte is eigenlijk het obstakel dat uitgebreid is aan de hand van de vorm van de robot in kwestie. De configuratieruimte kan opgeschreven worden als: \(CP := \{(x, y) : R(x, y) \cap P \neq \emptyset\}\)
+	
+	De Minkowski som definieert de som van twee veelhoeken als volgt: \(S_1 \oplus S_2 := \{p+q : p \in S_1, q \in S_2\}\), je kan hieronder ook een afbeelding zin als verduidelijking: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.4\linewidth]{afbeeldingen/Motion-plannine/Minkowski-som}
+		\label{fig:minkowski-som}
+	\end{figure}
+
+	Een observatie die we hierboven kunnen maken is dat de extreme punten in een bepaalde richting (stel r) in de conservatieruimte de som gaat zijn van de extreme punten (in die richting r) van beide veelhoeken. 
+	
+	De veelhoek die komt uit de Minkowski som is een veelhoek met maximaal $n+m$ edges (met $n$ de edges van de eerste veelhoek en $m$ de edges van de tweede veelhoek). Deze som kan bepaald worden in $O(n+m)$ tijd, wat nog bewezen zal worden. 
+	
+	Er zijn twee manieren om de Minkowski te bepalen: 
+	\subsubsection*{Eerste manier}
+	Deze manier zal voor elke vertex de som bepalen met de vertices van de andere veelhoek. Uiteindelijk nemen we dan de convex omhullende van deze resulterende vertices om de som te verkrijgen. 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{afbeeldingen/Motion-plannine/eerste-manier-som}
+		\label{fig:eerste-manier-som}
+	\end{figure}
+	Het is duidelijkd at er hier onnodige sommen zullen genomen worden: al de rode lijntjes die in de groene veelhoek gaan zijn eigenlijk onnodig bepaald. 
+	
+	\subsubsection*{Tweede manier}
+	De tweede manier zal voor twee tellers initialiseren die mogen lopen tot het aantal vertices van de ene en de andere veelhoek. Deze tellers zullen dan volgens het komende algoritme optellen om zo ervoor te zorgen dat er geen onnodige punten worden bepaald. Voor duidelijkheid, zie afbeeldingen: 
+	\begin{figure}[H]
+		\centering
+		\subfigure{\includegraphics[width=0.54\textwidth]{afbeeldingen/Motion-plannine/minkowskiSum}} 
+		\subfigure{\includegraphics[width=0.44\textwidth]{afbeeldingen/Motion-plannine/minkowskiSumExample}} 
+		\label{fig:minkowskiSum}
+	\end{figure}
+	
+	De teller zal opgaan wanneer de hoek met de volgende vertex van de rode vorm, groter is dan de hoek met de volgende vertex van de groene vorm. Zo zullen er geen nutteloze sommen worden gemaakt en kunnen er maximaal $O(n+m)$ punten worden overlopen (wat in deze situatie trouwens al het geval is). 
+	
+	Deze manier werkt uiteindelijk wel enkel met convexe veelhoeken. Voor niet-convexe veelhoeken kan men die veelhoek opsplitsen in convexe veelhoeken, daar telkens de som mee bepalen en deze veelhoeken dan terug mergen tot een convexe veelhoek. Hier volgt nog een theorem over: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{afbeeldingen/Motion-plannine/theoremComplexiteit}
+		\label{fig:theoremcomplexiteit}
+	\end{figure}
+	
+	Deze som kan dus gebruikt worden om de som van een robot met een vorm te bepalen. Het probleem is dat als men gewoon de som neemt van de robot met het obstakel, het niet overeen zal komen. Om deze som wel in orde te brengen, moeten we de som pakken van het obstakel met de puntspigeling van de robot, zoals op volgende afbeelding: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{afbeeldingen/Motion-plannine/negatieveRobot}
+		\label{fig:negatieverobot}
+	\end{figure}
+	
+	Na voor elk obstakel de configuratievariant te hebben bepaald, is dit hetgeen dat we in de configuratieruimte zullen zetten om dan met behulp van het algoritme voor een puntrobot het pad te bepalen. 
 	
 	
 	\subsection{Bewegingsplannen met rotatie}
+	Om rotaties te beschrijven, kiezen we een aantal oriëntaties en voor elke oriëntatie maken we een \textit{road map}. Deze mappen projecteren we dan over elkaar en zo creëeren we een stack van deze maps. Zo kunnen we voor elke oriëntatie weten waar in de ruimt deze zich mag bevinden en kan men zich verplaatsen binnen deze oriëntaties door over de stack heen en weer te gaan. 
+	
+	Een probleem hiermee is dat wanneer we maar een beperkt aantal oriëntaties hebben, het niet betekent dat elke draai correct is. Hiervoor kunnen we de robot groter maken in functie van een aantal slices zodat we zeker zijn dat de slices erboven en eronder ook geldig zijn. 
+	
+	Het probleem dat tot nu toe nog niet echt besproken is geweest, is dat we met het algoritme van de puntrobot eigenlijk niet het kortste pad zullen vinden, hiervoor zullen we gebruik maken van \textit{Visibiliteitsgrafen}.
 	
 	
 	\subsection{Visibiliteitsgrafen}
+	Het kortste pad binnen de configuratieruimte zal als hoekpunten altijd vertices hebben van de obstakels. Je kan hier nog een stelling en de pseudocode voor dat algoritme: 
+	\begin{figure}[H]
+		\centering
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/Motion-plannine/corollary}} 
+		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/Motion-plannine/shortestPath}} 
+		\label{fig:visibiliteitsgrafen-theorie}
+	\end{figure}
+	
+	Een naïve aanpak om de visibiliteit tussen twee punten te bepalen is elk paar punten te overlopen om te zien welke edges juist zijn. Dit resulteert in een tijdscomplexiteit van $O(n^3)$. 
+	
+	Dit zou wel beter kunnen met 
+	
+	..\textit{tromgeroffel}...
+	
+	een doorlooplijn!
+	\\
+	\\
+	Deze keer zal men voor elke vertex een doorlooplijn maken die rondgaat en als event de andere vertice heeft. Indien er een vertex verborgen is voor p, dan is er een edge die de lijn snijdt. De events zijn dan de vertices van S en de status ids dan een binaire boom met alle edges die de doorlooplijn snijdt. Hieronder de pseudocode om $G_{vis}$ op te stellen. 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{afbeeldingen/Motion-plannine/visibleVertices}
+		\label{fig:visiblevertices}
+	\end{figure}
+	
+	Deze graaf kan gemaakt worden in een tijd van $O(n^2\log(n))$. Hieronder nog alle stapjes na mekaar: 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{afbeeldingen/Motion-plannine/last-one}
+		\label{fig:last-one}
+	\end{figure}
+	
+	\subsection*{THE END}
+	Afgewerkt op 31/01/2021, finally done with this year\\
+	\textit{Powered by Music} 
 	
 	
 \end{document}
