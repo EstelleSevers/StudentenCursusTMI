@@ -32,7 +32,7 @@
 	In deze cursus zullen we de volgende stappen telkens volgen voor het opmaken van een algoritme: 
 	\begin{enumerate}
 		\item Aanvankelijk negeren we de speciale gevallen. Op deze manier maken we een eerste versie van het algoritme
-		\item Nu passen we ons algoritme aan op de speciale gevallen. Dit kan met (domme) if-then-else testen zullen we eerder vermijden. We willen het algoritme zo aanpassen zodat de speciale gevallen gewoon opgelost geraken. 
+		\item Nu passen we ons algoritme aan op de speciale gevallen. Dit kan met (domme) if-then-else testen, maar deze zullen we eerder vermijden. We willen het algoritme zo aanpassen zodat de speciale gevallen gewoon opgelost geraken. 
 		\item Dan zal je het effectieve algoritme implementeren!
 	\end{enumerate}
 	
@@ -45,7 +45,7 @@
 		\end{description}
 	Om je een idee te geven van het belang van zo een convex omhullende, geven we ook wat applicaties. Daarna zullen we ingaan op de algoritmes om ze te bepalen. 
 		\begin{itemize}
-			\item Als een verzameling punten staat voor een aantal obstakels, zal een robotarm het pad 	errond kiezen volgens de convex omhullende. 
+			\item Als een verzameling punten staat voor een aantal obstakels, zal een robotarm het pad 	er rond kiezen volgens de convex omhullende. 
 			\item We kunnen bij het detecteren of twee figuren overlappen, de convex omhullende berekenen en dan zien of deze vormen al overlappen. Als dat niet het geval is, zullen de vormen zelf ook niet overlappen. 
 			\item Om het puntenpaar te vinden dat het verst van elkaar gelegen is in een verzameling, is het relevant de convex omhullende te bepalen aanegzien alle punten die het verste van elkaar zitten in de verzameling ook op de convex omhullende zullen liggen. 
 		\end{itemize}
@@ -63,7 +63,7 @@
 	
 	De eerste lus zal $n^2$ keer lopen, gezien het voor elk paar hetgeen in de lus zal uitvoeren. In de lus zelf zal er nog eens over de punten gelopen worden om te kijken of deze allemaal rechts liggen van het gegeven punt, wat nog een $n$ keer zal lopen. De tijdscomplexiteit van dit algoritme is dus $O(n^3)$. 
 	
-	Naast het feit dat het algoritme helemaal niet efficiënt is, zijn er ook wat problemen in verband met de nauwkeurigheid van het berekenen of zo een punt links of rechts licht van een ander punt. Het kan zijn dat hierdoor punten fout worden bepaald terwijl ze wel links liggen van een edge. Een ander probleem is wanneer er meerdere punten op een lijn liggen, dit is dan een speciaal geval maar hier zou extra rekening mee gehouden moeten worden, het algoritme zal hier niet automatisch mee omgaan. Dit algoritme is dus duidelijk niet al te efficiënt en er zijn een paar gevallen waarbij het zelfs foute beslissingen kan maken. 
+	Naast het feit dat het algoritme helemaal niet efficiënt is, zijn er ook wat problemen in verband met de nauwkeurigheid van het berekenen of zo een punt links of rechts ligt van een ander punt. Het kan zijn dat hierdoor punten fout worden bepaald terwijl ze wel links liggen van een edge. Een ander probleem is wanneer er meerdere punten op een lijn liggen, dit is dan een speciaal geval maar hier zou extra rekening mee gehouden moeten worden, het algoritme zal hier niet automatisch mee omgaan. Dit algoritme is dus duidelijk niet al te efficiënt en er zijn een paar gevallen waarbij het zelfs foute beslissingen kan maken. 
 	
 	
 	\subsection{Incrementeel algoritme 	(Andrew's algorithm)}
@@ -77,7 +77,7 @@
 		\subfigure{\includegraphics[width=0.24\textwidth]{afbeeldingen/fourth-convex}}
 		\label{fig:incremental-example}
 	\end{figure}
-	Bij afbeelding c maken die punten duidelijk een linkerdraai, wat niet zou mogen voor een convex hull, dus zullen de twee edges verwijderd worden en vervangen worden door de nieuwe. Dit zal voor heel het puntenwolk verdergaan voor de bovenste helft. Voor duidelijkheid is hieronder nog de psuedocode
+	Bij afbeelding c maken die punten duidelijk een linkerdraai, wat niet zou mogen voor een convex hull, dus zullen de twee edges verwijderd worden en vervangen worden door de nieuwe. Dit zal voor heel het puntenwolk verdergaan voor de bovenste helft. Voor duidelijkheid is hieronder nog de pseudocode
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.9\linewidth]{afbeeldingen/convex-hull}
@@ -160,12 +160,12 @@
 		\includegraphics[width=0.8\linewidth]{afbeeldingen/find-Intersections}
 		\label{fig:find-intersections}
 	\end{figure}
-	Het is duidelijk dat de tijdscomplexiteit van dit algoritme dus altijd $O(n^2)$ zal zijn en dat dit een \textit{input-afhankelijke} complexiteit heeft. Wanneer elk lijnstuk met elkaar snijdt kan dit geen kwaad, maar als geen enkel lijnstuke met een ander snijdt, zal je hier heel veel tijd mee verliezen. 
+	Het is duidelijk dat de tijdscomplexiteit van dit algoritme dus altijd $O(n^2)$ zal zijn en dat dit een \textit{input-afhankelijke tijdscomplexiteit} heeft. Wanneer elk lijnstuk met elkaar snijdt kan dit geen kwaad, maar als geen enkel lijnstuk met een ander snijdt, zal je hier heel veel tijd mee verliezen. 
 	
 	
 	\subsection{Doorlooplijn algoritme}
 	%TODO stel u voor, ge weet ondertussen nog niet wat een doorlooplijn is
-	Een doorlooplijn is een denkbeeldige lijn die door de dataset loopt en bijhoudt welke lijnsegmenten actief zijn en dus potentieel elkaar kunnen snijden. Als twee lijnsegemnten op die lijn zitten kan het zijn dat ze elkaar snijden, als ze niet op een moment gelijktijdig op de lijn zitten, is er geen kans dat ze elkaar snijden en moeten ze dus niet geëvalueerd worden op snijpunten. Als eerste zullen de punten dus gesorteerd moeten worden op de y-as volgens de begin- en eindpunten van de lijnsegmenten. Deze zouden dan terechtkomen in een event queue om deze af te lopen en bij elk punt een actie te ondernemen. Bij een startpunt worden alle actieve lijnsegemten geëvalueerd met het nieuwe toegevoegde lijnsegmenten om snijpunten te zoeken. Zo wordt een deel van de lijnsegmenten gefilterd en is het geen bruteforce. De datastructuur voor de doorlooplijn zou in dit geval gewoon een lijst kunnen zijn aangezien deze niet gesorteerd hoeven te zijn. 
+	Een doorlooplijn is een denkbeeldige lijn die door de dataset loopt en bijhoudt welke lijnsegmenten actief zijn en dus potentieel elkaar kunnen snijden. Als twee lijnsegmenten op die lijn zitten kan het zijn dat ze elkaar snijden, als ze niet op een moment gelijktijdig op de lijn zitten, is er geen kans dat ze elkaar snijden en moeten ze dus niet geëvalueerd worden op snijpunten. Als eerste zullen de punten dus gesorteerd moeten worden op de y-as volgens de begin- en eindpunten van de lijnsegmenten. Deze zouden dan terechtkomen in een event queue om deze af te lopen en bij elk punt een actie te ondernemen. Bij een startpunt worden alle actieve lijnsegmenten geëvalueerd met het nieuwe toegevoegde lijnsegmenten om snijpunten te zoeken. Zo wordt een deel van de lijnsegmenten gefilterd en is het geen bruteforce. De datastructuur voor de doorlooplijn zou in dit geval gewoon een set kunnen zijn aangezien deze niet gesorteerd hoeven te zijn. 
 	
 	De worst case van dit algoritme is wanneer er allemaal lijnstukken parallel verticaal naast elkaar liggen. Dan wordt elk lijnstuk met elkaar vergeleken ondanks dat we een doorlooplijn gebruiken en is het even onefficiënt als een brute force algoritme. 
 		
@@ -184,7 +184,7 @@
 	De event queue zal in dit geval ook een gebalanceerde zoekboom zijn, het is geen priority queue aangezien er niets is dat een 'prioriteit' heeft.
 	\begin{description}
 		\item[Start event:] Een start event is wanneer een nieuw lijnstuk actief wordt op de doorlooplijn, in dat geval zal het nieuwe lijnstuk vergeleken worden met zijn buren op snijpunten. Als er snijpunten worden gevonden, worden deze toegevoegd aan de event queue. 
-		\item[intersectoin event:] Bij een snijpunt zal het algoritme de volgorde van de lijnstukken op de status queue verwisselen en deze lijnstukken zullen dan met hun nieuwe buren vergeleken worden voor nieuwe snijpunten. 
+		\item[Intersection event:] Bij een snijpunt zal het algoritme de volgorde van de lijnstukken op de status queue verwisselen en deze lijnstukken zullen dan met hun nieuwe buren vergeleken worden voor nieuwe snijpunten. 
 		\item[End event:] Het einde van een lijnstuk betekent dat dit lijnstuk van de status queue gehaald moet worden en dat er moet gekeken worden of de nieuwe buren elkaar snijden. 
 	\end{description}
 
@@ -216,7 +216,7 @@
 
 	Het centrale idee is dat elke edge uit bovenstaande afbeelding kan gemaakt worden uit 2 'half-edges'. Deze half edges hebben elk een oorsprong-vertex, een twin (de andere half edge), een incidentface (face aan de linkerkant van de half-edge), een next en een prev. Elke vertex bestaat uit coördinaten en een incidentEdge (de edge startende in de vertex). 
 	
-	Met deze datastructuur kunnen we gemakkelijker de overlay van twee vlakverdelingen bepalen. Dit is eignelijk aanvankelijk het construeren van een DCEL uit twee DCEL's, wat door een doorloopalgoritme zal gebeuren. Ook hier werken we met events: 
+	Met deze datastructuur kunnen we gemakkelijker de overlay van twee vlakverdelingen bepalen. Dit is eigenlijk aanvankelijk het construeren van een DCEL uit twee DCEL's, wat door een doorloopalgoritme zal gebeuren. Ook hier werken we met events: 
 	\begin{itemize}
 		\item Een vertex van S1
 		\item Een vertex van S2
