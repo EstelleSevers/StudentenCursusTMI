@@ -297,7 +297,7 @@
 		\includegraphics[width=0.9\linewidth]{afbeeldingen/triangulatie-bewakers}
 		\label{fig:triangulatie-bewakers}
 	\end{figure}
-	Het is duidelijk dat de laatste figuue zorgt voor een optimale oplossing: zo weinig mogelijk bewakers die nog steesd de volledige ruimte in het oog kunnen houden. Het vinden van deze perfecte plekken kan aan de hand van een 'kleuring'. 
+	Het is duidelijk dat de laatste figuur zorgt voor een optimale oplossing: zo weinig mogelijk bewakers die nog steeds de volledige ruimte in het oog kunnen houden. Het vinden van deze perfecte plekken kan aan de hand van een 'kleuring'. 
 	
 	
 	\subsection{kleuring}
@@ -328,9 +328,9 @@
 		\includegraphics[width=0.7\linewidth]{afbeeldingen/triangulaties-y-monotoon}
 		\label{fig:triangulaties-y-monotoon}
 	\end{figure}
-	Het is relatief duidelijk dat de split en merge knopen het probleem vormen om de veelhoek y-monotoon te maken. Wanneer een veelhoek niet y-monotoon is, is het duidelijk dat het of een split node heeft, of een merge node, deze zullen we moeten wegwerken met een algoritme. Het algoritme zal dan een diagonaal maken bij merge-vertices die naar beneden gaat, en bij split-vertices die naar boven gaat. Dit zal, you guessed it, met een doorlooplijn algoritme gebeuren. Hierij initialiseren we een helper voor een edge, deze helper is de laatste vertex boven de doorlooplijn, waarbij de horizontale tussen de edge en de vertex volledig binnen de veelhoek ligt. 
+	Het is relatief duidelijk dat de split en merge knopen het probleem vormen om de veelhoek y-monotoon te maken. Wanneer een veelhoek niet y-monotoon is, is het duidelijk dat het of een split node heeft, of een merge node, deze zullen we moeten wegwerken met een algoritme. Het algoritme zal dan een diagonaal maken bij merge-vertices die naar beneden gaat, en bij split-vertices die naar boven gaat. Dit zal, you guessed it, met een doorlooplijn algoritme gebeuren. Hierbij initialiseren we een helper voor een edge, deze helper is de laatste vertex boven de doorlooplijn, waarbij de horizontale tussen de edge en de vertex volledig binnen de veelhoek ligt. 
 	
-	Om een merge vertex juist op te lossen, kijk je telkens er een nieuwe helper wordt geïnitialiseerd, of de oude helper een merge vertex is. Als die een merge vertex is, dan zal de oude en de nieuwe helper verbonden worden. Een split vertex zal gelijkaardig opgelost worden, maar dan zal de split een nieuwe helper zijn en wordt deze verboncen met de oude helper. Dit algoritme kan gebeuren in $O(n\log(n))$ met het geheugen in lineaire tijd. 
+	Om een merge vertex juist op te lossen, kijk je telkens er een nieuwe helper wordt geïnitialiseerd, of de oude helper een merge vertex is. Als die een merge vertex is, dan zal de oude en de nieuwe helper verbonden worden. Een split vertex zal gelijkaardig opgelost worden, maar dan zal de split een nieuwe helper zijn en wordt deze verbonden met de oude helper. Dit algoritme kan gebeuren in $O(n\log(n))$ met het geheugen in lineaire tijd. 
 	
 	De triangulatie van de overbleven monotone veelhoeken kan dan gedaan worden met een greedy algoritme. We sorteren de vertices volgens y-coördinaat en zetten de twee eerste vertices op de stack. Daarna wordt er zo veel mogelijk getrianguleerd naar wat er op de stack staat. Dit geldt voor alle geldige diagonalen op de stack. Zodra er een ongeldige diagonaal is, wordt er naar de laatste vertex gekeken en van daar uit nieuwe diagonalen maken. Hier is een goede illustratie van in de slides. 
 	
