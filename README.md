@@ -7,9 +7,9 @@ Het focust op alle geziene leerstof in de lessen en op de slides: algoritmen, co
 De bedoeling is om een samenvatting te geven van het [boek](https://link.springer.com/book/10.1007/978-3-540-77974-2) gebruikt voor deze cursus, maar met
 uitgebreidere uitleg dan de slides.
 
-## How to use
+## Oplossingen
 
-*Not yet implemented*
+De map oplossingen bevat oplossingen van de voorbeeld examenvragen op Toledo. Deze zijn niet nagekeken en hier kunnen absoluut fouten in staan. Ze zijn louter als voorbeeld.
 
 ---
 
