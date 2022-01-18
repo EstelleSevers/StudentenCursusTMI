@@ -1,0 +1,116 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[dutch]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{fullpage}
+\usepackage{subfigure}
+\usepackage{hyperref}
+
+
+\author{Matthias Kovacic}
+\title{TMI - Cheat Sheet Complexiteiten}
+\begin{document}
+	\maketitle
+	\section{Les 1 - Convex Omhullende}
+		In de eerste les zijn de volgende algoritmes besproken om de convex omhullende te berekenen:
+		\begin{enumerate}
+			\item Brute Force
+			\item (Andrew's) Incremental Algorithm
+			\item Graham Scan
+			\item Jarvis March
+			\item Divide-\&-Conquer
+		\end{enumerate}
+	
+		\subsection{Brute Force}
+			\begin{enumerate}
+				\item Tijdscomplexiteit: $O(n^3)$ - Voor de $n^2$ paren moeten er nog $n - 1$ punten gecontroleerd worden.
+			\end{enumerate}
+		
+		\subsection{Incremental Algorithm}
+			\begin{enumerate}
+				\item Eerst worden alle punten gesorteerd volgens x-coordinaat. Dit vraagt $O(n log (n))$ tijd.
+				\item Daarna worden de punten $n$ keer overlopen, wat $O(n)$ tijd vraagt.
+				\item Tijdscomplexiteit: $O(n log(n)) + O(n) = O(n log (n))$
+			\end{enumerate}
+		
+		\subsection{Graham Scan}
+			\begin{enumerate}
+				\item Zoek het punt met laagste y-coordinaat. Dit vraagt $O(n)$ tijd.
+				\item Sorteer alle punten volgens poolhoek t.o.v. het punt gevonden in stap 1. Dit vraagt $O(n log (n))$ tijd.
+				\item Daarna wordt elk punt overlopen (a la Incremental Style). Dit vraagt $O(n)$.
+				\item Tijdscomplexiteit: $O(n) + O(n log(n)) + O(n) = O(n log (n))$
+			\end{enumerate}
+		
+		\subsection{Jarvis March}
+			\begin{enumerate}
+				\item Zoek het punt met laagste y-coordinaat. Dit vraagt $O(n)$ tijd.
+				\item Overloop $n$ punten en bereken hun poolhoek t.o.v. het eerste punt. Zoek het punt met kleinste poolhoek. Dit vraagt opnieuw $O(n)$ tijd. Beschouw het gevonden punt nu als referentiepunt.
+				\item Doe dit tot je terug in het oorspronkelijke punt komt met laagste y-coordinaat. Dit vraagt $O(k)$ tijd waarbij $k$ het aantal punten op de convex omhullende is. Elke iteratie worden er dus $n$ punten gecontroleerd.
+				\item Tijdscomplexiteit: $O(n) + O(kn) = O(kn)$
+				\item Opmerking 1. De tijdscomplexiteit is hier \emph{output-afhankelijk}!
+				\item Opmerking 2. $k$ is hier geen constante. De $O(kn)$ term mag dus niet zomaar vereenvoudigd worden naar $O(n)$!
+			\end{enumerate}
+		
+		\subsection{Divide-\&-Conquer}
+			\begin{enumerate}
+				\item Verdeel de punten in 2 helften, dit vraagt $O(n)$ tijd. 
+				\item Bepaal de convex omhullende voor de twee helften. Dit kan met verdere opdeling of een algoritme dat eerder gezien is. Dit vraagt ongeveer $O(n log (n))$ tijd.
+				\item De \emph{merge}-stap (e.g. het zoeken van onder/bovenbruggen) kan gebeuren in $O(n)$ tijd. 
+				\item Tijdscomplexiteit: $O(n) + O(n log (n)) + O(n) = O(n log (n))$
+			\end{enumerate}
+	\section{Les 2 - Intersecties van lijnstukken/DCEL}
+		In de tweede les zijn de volgende algoritmes besproken:
+		\begin{enumerate}
+			\item Brute Force Line Intersection
+			\item Bentley-Ottman Algorithm
+			\item DCEL Overlay
+		\end{enumerate}
+	
+		\subsection{Brute Force Line Intersection}
+			\begin{enumerate}
+				\item Tijdscomplexiteit: $O(n^2)$, alle paren van lijnstukken moeten worden gecontroleerd op intersectie.
+			\end{enumerate}
+		
+		\subsection{Bentley-Ottman Algorithm}
+			\begin{enumerate}
+				\item Opmerking 1. Dit is een sweep-line algoritme. Er moet een event-queue en status bijgehouden worden. We veronderstellen deze om BST (Binary Search Trees) te zijn, wat altijd $O(log (n))$ operaties garandeert.
+				\item Opmerking 2. De events zijn de start/eindpunten van de lijnsegmenten. Bij $n$ segmenten zijn er dus $n$ start-events en $n$ eind-events.
+				\item Een start-event kan worden behandelt in $O(log (n))$ tijd. Het komt $n$ keer voor, dus alle start-events behandelen vraagt $O(n log (n))$ tijd.
+				\item Eind-events zijn analoog aan start-events: $O(n log (n))$. 
+				\item Het andere soort events zijn de intersectie-events. Zo zijn er $k$ (ook weer onbekend, Cfr. Jarvis March). Alle intersectie-events behandelen vraagt dus $O(k log n)$ tijd.
+				\item Tijdscomplexiteit: $O(n log (n)) + O(n log (n)) + O(k log (n)) = O((n + k) log (n))$ 
+				\item Opmerking 3. De tijdscomplexiteit is hier \emph{output-afhankelijk}!
+			\end{enumerate}
+		
+		\subsection{DCEL Overlay}
+			\begin{enumerate}
+				\item Opmerking 1. Het algoritme zelf staat volledig uitgeschreven in het boek. Het maakt gebruik van een sweepline en van supergrafen. 
+				\item Opmerking 2. De complexiteit van een subdivisie (e.g. DCEL) is gegeven door: $c = v + e + f$ waarbij $v$ het aantal vertices, $e$ het aantal edges en $f$ het aantal faces is. 
+				\item Tijdscomplexiteit: $O(n log (n) + k log (n))$ waarbij $n = n_1 + n_2$ met $n_1$ de complexiteit van de eerste subdivisie en $n_2$ die van de tweede. $k$ is de complexiteit van de geconstrueerde overlay.
+				\item Opmerking 3. De tijdscomplexiteit is hier \emph{output-afhankelijk}!
+			\end{enumerate}     
+	\section{Les 3 - Veelhoek-triangulatie}    
+		In de derde les zijn de volgende algoritmes besproken:
+		\begin{enumerate}
+			\item Y-monotone polygon
+			\item Polygon triangulation
+		\end{enumerate}                
+	
+		\subsection{Y-monotone polygon}
+			\begin{enumerate}
+				\item Opmerking 1. Dit is opnieuw een sweepline-algoritme. Er wordt nergens het "bewijs" van complexiteit geleverd.
+				\item Tijdscomplexiteit: $O(n log (n))$ met $n$ het aantal vertices in de polygon. 
+			\end{enumerate}
+		
+		\subsection{Polygon Triangulation}
+			\begin{enumerate}
+				\item Alle vertices overlopen kost $O(n)$ tijd. Het kan bewezen worden (zie boek) dat ook de verbindingen maken maximaal lineaire tijd kost.
+				\item Tijdscomplexiteit: $O(n)$
+			\end{enumerate}
+\end{document}
