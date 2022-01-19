@@ -272,4 +272,29 @@
 					\item \emph{expected} Tijdscomplexiteit: $O(n log (n))$
 				\end{enumerate}
 			
+	\section{Les 7 - Voronoi Diagramma}
+		In les 7 werd enkel het algoritme van Fortune nader bekeken. Het algoritme zelf is zeer complex maar de tijdscomplexiteit is dat niet.
+		
+		\begin{enumerate}
+			\item Opmerking 1. We gebruiken het algoritme van Fortune. Dit is een sweepline algoritme. We houden een status bij in de vorm van een BST en een event queue in de vorm van een priority queue.
+			\item Als we $n$ punten hebben, weten we dat er $n$ \emph{site}-events zijn. Door het gebruik van een BST zijn alle operaties hierop begrensd door $O(log (n))$. De \emph{site}-events worden dus allemaal afgehandeld in $O(n log (n))$ tijd. 
+			\item Het andere type events zijn \emph{circle}-events. Elk \emph{circle}-event definieert een Voronoi-vertex. We kunnen bewijzen dat er maximaal $2n - 5$ Voronoi-vertices zullen zijn in het hele Voronoi-diagramma. Ook hier zijn de operaties op de BST begrensd door $O(log (n))$. Er zijn $O(2n - 5)$ events, die dus allemaal afgehandeld worden in $O(n log (n))$ tijd.
+			\item Tijdscomplexiteit: $O(n log (n)) + O(n log (n)) = O(n log (n))$.				
+			\item Opmerking 2. Het is aan te tonen dat het sorteren van een een set getallen reduceerbaar is naar het construeren van het Voronoi-diagramma. Het is dus niet mogelijk een algoritme te vinden dat het beter doet dan $O(n log (n))$. 
+		\end{enumerate}
+	
+	\section{Les 8 - Delaunay Triangulatie}
+		In les 8 werd de Delaunay triangulatie besproken. De analyse moet niet gekend zijn, enkel de resultaten. 
+	
+		\begin{enumerate}
+			\item \emph{expected} Tijdscomplexiteit: $O(n log (n))$
+			\item \emph{expected} Ruimtecomplexiteit: $O(n)$
+		\end{enumerate}	
+		
+	\section{Les 9 - Béziercurven}
+		In les 9 is er geen enkele afleiding voor complexiteit gezien. 
+		
+	\section{Les 10 - Binary Space Partitions}
+	\section{Les 11 - Motion Planning \& Visibility Graphs}
+		
 \end{document}
