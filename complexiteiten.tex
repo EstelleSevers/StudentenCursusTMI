@@ -64,7 +64,7 @@
 				\item De \emph{merge}-stap (e.g. het zoeken van onder/bovenbruggen) kan gebeuren in $O(n)$ tijd. 
 				\item Tijdscomplexiteit: $O(n) + O(n log (n)) + O(n) = O(n log (n))$
 			\end{enumerate}
-	\section{Les 2 - Intersecties van lijnstukken/DCEL}
+	\section{Les 2 - Intersecties van Lijnstukken/DCEL}
 		In de tweede les zijn de volgende algoritmes besproken:
 		\begin{enumerate}
 			\item Brute Force Line Intersection
@@ -115,4 +115,93 @@
 			\end{enumerate}
 		
 	\section{Les 4 - Half Plane Intersection}
+		In de vierde les zijn de volgende algoritmes besproken:
+		\begin{enumerate}
+			\item Common intersection of a set of $n$ half-planes
+			\item Incremental intersection of a set of $n$ half-planes
+			\item Kleinst omsluitende cirkel
+		\end{enumerate}    
+	
+		\subsection{Common Intersection (Sweepline) of Halfplanes}
+			\begin{enumerate}
+				\item Opmerking 1. Elk halfvlak is gedefinïeerd als een verzameling van punten die voldoen aan een constraint van de vorm: $a_ix + b_iy \leq c_i$.
+				\item Opmerking 2. Een constraint is een lineaire vergelijking, vandaar de naam "lineair programmeren"
+				\item Opmerking 3. We kunnen dit ook recursief berekenen, maar dan komen we uit op een algoritme dat $O(n log^2 (n))$ tijd vraagt.
+				\item We splitsen de set van halfvlakken in twee en gaan recursief te werk (Cfr. Merge Sort). Intuïtief is aan te voelen dat dit een logaritmische $O(log (n))$ complexiteit zal geven. We bekijken enkel nog de tijd nodig om de merge-stap uit te voeren. 
+				\item We gebruiken een sweepline algoritme dat de linker/rechterkant van elke set van halfvlakken bijhoudt (We berekenen de intersectie van twee sets van halfvlakken, niet van de halfvlakken zelf!).
+				\item Er is $O(n)$ tijd nodig om te intersectie van twee convexe polygons te vinden.
+				\item Tijdscomplexiteit: $O(n) \times O(log (n)) = O(n log (n))$.
+			\end{enumerate}
+	
+		\subsection{Incremental Intersection of Halfplanes}
+			\begin{enumerate}
+				\item Opmerking 1. We hebben in het vorige algoritme gezocht naar een regio waar alle halfvlakken geldige punten hebben. We kunnen de logaritmische factor wegwerken door de oplossing te maximaliseren.
+				\item Opmerking 2. We starten met twee halfvlakken $m_1$ en $m_2$. We zoeken hun snijpunt $v_0$ (als ze er één hebben), dit is nu de "optimale vertex". We permuteren nu de andere halfvlakken en voegen deze toe. Als de optimale vertex tot een nieuw halfvlak behoort doen we niets, anders zoeken we naar een nieuwe optimale vertex.
+				\item We kunnen een optimale vertex vinden in de $i$-de stap met $O(i)$ tijd. 
+				\item Opmerking 3. Als we de permutatiestap niet doen, krijgen we worst case een $\sum_{i=1}^{n}O(i) = O(n^2)$ algoritme.
+				\item We bekijken de kans dat na de permutatie de $i$-de stap een dure stap is (e.g. we zoeken de optimale vertex). Aangezien er 2 mogelijkheden zijn die deze stap induceren, is die kans $\frac{2}{i}$. De kans dat de stap dan goedkoop is is $\frac{i - 2}{i}$. 
+				\item Tijdscomplexiteit wordt dan: $\sum_{i=1}^{n}O(i)\frac{i}{2} = O(n)$. 
+				\item Opmerking 4. Dit is de \emph{expected} running time. In werkelijkheid kunnen we nog altijd $O(n^2)$ tijd nodig hebben als de permutatie slecht is.
+			\end{enumerate}
+			
+		\subsection{Kleinst Omsluitende Cirkel}
+			\begin{enumerate}
+				\item We beginnen met 3 punten. De cirkel $D_n$ is dan uniek. Als we een punt toevoegen in de $i + 1$-stap, kan dit punt reeds binnen $D_i$ liggen, we doen niets. Als het punt buiten de cirkel ligt, dan heeft de nieuwe cirkel $D_{i+1}$ dit punt op de rand. We hebben nu een nieuw probleem: de kleinst omsluitende cirkel met 1 punt op de rand. We gebruiken dezelfde strategie. Het probleem duikt opnieuw op voor een kleinst omsluitende cirkel met 2 punten op de rand. Dit laatste kost $O(n)$ tijd.
+				\item Hoeveel tijd vraagt het om de kleinst omsluitende cirkel te berekenen met 1 punt op de rand? Er zijn twee punten die op de rand liggen dus de kans dat een punt tot de rand behoort is $\frac{2}{i}$ (Cfr. incrementele constructie halfvlakken). Dit vraagt $O(n)$ tijd. 
+				\item Voor de kleinst omsluitende cirkel gebruiken we dezelfde techniek, wat dus ook $O(n)$ tijd vraagt. 
+				\item Tijdscomplexiteit: $O(n)$
+			\end{enumerate}
+	\section{Les 5 - KD-Bomen \& Range Trees}
+		In de derde les zijn de volgende algoritmes besproken:
+		\begin{enumerate}
+			\item 1D Interval Query
+			\item Constructie KD-boom
+			\item k-D Interval Query in KD-boom
+			\item Constructie Range Tree
+			\item Query in Range Tree
+		\end{enumerate}   
+	
+		\subsection{1D Interval Query}
+			\begin{enumerate}
+				\item Om data bij te houden gebruiken we een BST. Dit garandeert dat alle operaties gebeuren in $O(log (n))$ tijd.
+				\item Opmerking 1. Het zou ondertussen algemene kennis moeten zijn dat een BST $O(n)$ geheugen vraagt en $O(n log (n))$ tijd om op te bouwen.
+				\item Als we een interval van data willen opvragen, zoeken we naar $x_{min} en x_{max}$ in de BST in logaritmische tijd. 
+				\item Onderweg tijdens deze zoektocht moeten we echter enkele subbomen rapporteren. Deze overlopen vraagt lineaire tijd in het aantal data-punten: $O(k)$. 
+				\item Tijdscomplexiteit: $O(log (n)) + O(k) = O(log (n) + k)$
+			\end{enumerate}
+		
+		\subsection{Constructie KD-boom}
+		\begin{enumerate}
+			\item Analoog aan het zoeken van de common intersection van halfplanes en merge-sort gebruiken we een recursief algoritme. We houden splitsingslijnen bij in een BST dus alle operaties hierop zijn opnieuw gegarandeert te gebeuren in $O(log (n))$ tijd. 
+			\item Elke stap zoeken we de mediaan. Dit kan in constante tijd gebeuren indien we de data sorteren. Dit vraagt $O(n log (n))$ tijd. Om geen kwadratisch logaritme te krijgen gebeurt dit sorteren in een pre-process. 
+			\item Tijdscomplexiteit: $O(n log (n)) + O(n log (n)) = O(n log (n))$
+			\item Opmerking 1. Het geheugen is opnieuw $O(n)$ voor een BST. 
+		\end{enumerate}
+	
+		\subsection{k-D Interval Query in kD-boom}
+		\begin{enumerate}
+			\item Opmerking 1. Elke knoop in de BST definïeert een regio de k-D representatie. We kunnen dus opnieuw een recursief zoekalgoritme gebruiken. 
+			\item We weten van de 1D Interval Query dat het rapporteren van subbomen lineair is in het aantal datapunten $i$: $O(i)$. 
+			\item We zoeken nu hoeveel knopen we bezoeken die slechts partieel in het zoekinterval liggen. We onderzoeken knopen verder indien de regio van een kinderknoop van de huidige knoop het interval intersecteert. 
+			\item Dit komt neer op het zoeken naar het aantal intersectie tussen een willekeurige horizontale/verticale lijn met de kD-boom. Het aantal regio's zal verdubbelen elke $k$ niveau's in de boom. Alle doorsnede van de regio's vormen dus een boom met hoogte $\frac{1}{k}log (n)$. Het totaal aantal regio's is dus begrensd door $2^{\frac{1}{k}log (n)}$. Als we dit uitrekenen voor $k = 2$ bekomen we: $O(2^{\frac{1}{2}log (n)}) = O(\sqrt{n})$.
+			\item Tijdscomplexiteit 2D-boom: $O(\sqrt{n} + i)$
+			\item Tijdscomplexiteit kD-boom: $O(n^{1-\frac{1}{k}} + i)$
+		\end{enumerate}
+	
+		\subsection{Constructie Range Tree}
+		\begin{enumerate}
+			\item Opmerking 1. Een range tree heeft mogelijks betere tijdscomplexiteit om op te zoeken, maar dit gaat ten koste van het geheugen!
+			\item Elk datapunt is maximaal 1 keer opgeslagen per niveau van de boom: $O(n)$. Er zijn $O(log n)$ niveau's waarop het punt wordt opgeslagen.
+			\item Ruimtecomplexiteit: $O(n log (n))$ 
+		\end{enumerate}
+	
+		\subsection{Query in Range Tree}
+		\begin{enumerate}
+			\item Op elke knoop moeten we beslissen of we verder afdalen in de boom of dat we een subboom oproepen. We doen hier de analyse voor 2D en generaliseren later.
+			\item We weten als we een subboom oproepen we eigenlijk een 1D Interval Query doen. Dit vraagt $O(log (n) + k)$ tijd, met $k$ het aantal te rapporteren datapunten.
+			\item Dit kan mogelijks voor elke knoop: $\sum_{v}O(log (n) + k_v)$, met $v$ een knoop in de huidige boom. 
+			\item De som van alle $k_v$ is $k$, het totale aantal gerapporteerde punten. We weten ook dat de lengte van de zoekpaden voor de query in deze boom $O(log (n))$ tijd vragen. De som $\sum_{v}O(log (n)) = O(log^2 (n))$
+			\item Tijdscomplexiteit: $O(log^2 (n) + k)$µ
+			\item Opmerking 1. In $d$ dimensies wordt dit voor het geheugen: $O(n log^{d-1} (n))$, voor de constructietijd $O(n log^{d-1} (n))$ en voor het zoeken $O(log^{d} (n) + k)$. 
+		\end{enumerate}
 \end{document}
