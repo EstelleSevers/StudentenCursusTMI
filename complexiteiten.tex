@@ -43,7 +43,7 @@
 			\begin{enumerate}
 				\item Zoek het punt met laagste y-coordinaat. Dit vraagt $O(n)$ tijd.
 				\item Sorteer alle punten volgens poolhoek t.o.v. het punt gevonden in stap 1. Dit vraagt $O(n log (n))$ tijd.
-				\item Daarna wordt elk punt overlopen (a la Incremental Style). Dit vraagt $O(n)$.
+				\item Daarna wordt elk punt overlopen (a la Andrews Style). Dit vraagt $O(n)$.
 				\item Tijdscomplexiteit: $O(n) + O(n log(n)) + O(n) = O(n log (n))$
 			\end{enumerate}
 		
@@ -152,7 +152,7 @@
 				\item Tijdscomplexiteit: $O(n)$
 			\end{enumerate}
 	\section{Les 5 - KD-Bomen \& Range Trees}
-		In de derde les zijn de volgende algoritmes besproken:
+		In de vijfde les zijn de volgende algoritmes besproken:
 		\begin{enumerate}
 			\item 1D Interval Query
 			\item Constructie KD-boom
@@ -204,4 +204,72 @@
 			\item Tijdscomplexiteit: $O(log^2 (n) + k)$µ
 			\item Opmerking 1. In $d$ dimensies wordt dit voor het geheugen: $O(n log^{d-1} (n))$, voor de constructietijd $O(n log^{d-1} (n))$ en voor het zoeken $O(log^{d} (n) + k)$. 
 		\end{enumerate}
+	
+	\section{Les 6 - Puntlocatie}
+		In de zesde les zijn de volgende algoritmes besproken:
+		\begin{enumerate}
+			\item Puntlocatie m.b.v. Slabs
+			\item Opstellen/Query in Trapeziummap
+		\end{enumerate}
+	
+		\subsection{Puntlocatie m.b.v. Slabs}
+			\begin{enumerate}
+				\item Opmerking 1. We gaan ervan uit dat de polygon in general position is. Dit wilt zeggen dat er geen vertices zijn met dezelde x-coordinaat. Indien dit wel het geval is kunnen we een "shear"-operatie uitvoeren op elke vertex van de polygon:
+				$$shear(S) = \forall v \in S: v \rightarrow v_s : \begin{bmatrix}
+					v_x\\
+					v_y
+				\end{bmatrix} \mapsto 
+				\begin{bmatrix}
+					v_x + \epsilon v_y\\
+					v_y
+				\end{bmatrix}$$
+				\item We overlopen nu in $O(n)$ tijd alle vertices en houden 'verticale slabs' bij. Dit zijn een soort van verticale stroken. Hier is $O(2n) = O(n)$ geheugen voor nodig. 
+				\item Als we nu een query voor een punt $q$ willen uitvoeren, kijken we naar de x-coordinaat van $q$. We kunnen in $O(log (n))$ tijd bepalen in welke slab $q$ zal liggen (Cfr. Binary Search).
+				\item Binnen elke slab bevatten de edges een pointer naar de originele face. Het zal ook $O(log (n))$ tijd vragen om te kijken waar $q$ ligt binnen deze slab. Binnen deze slab is opnieuw $O(n)$ geheugen nodig.
+				\item Tijdscomplexiteit voor een query: $O(log (n))$
+				\item Ruimtecomplexiteit: $O(n^2)$	
+			\end{enumerate}
+		
+		\subsection{Opstellen/Query in Trapeziummap}
+			De uitleg hier gaat alleen over de complexiteit! We beginnen met het opstellen en gaan daarna over op de analyse van een query. Het opstellen bestaat ook uit twee aparte analyses: de ruimte en tijdscomplexiteit. We beginnen met de ruimtecomplexiteit:
+			
+			\subsubsection{Ruimtecomplexiteit - Opbouw}
+				\begin{enumerate}
+					\item De trapeziummap wordt bijgehouden m.b.v. een DAG of \emph{directed acyclic graph} $D$. Initieel bevat deze alleen de boundingbox $R$. Op de $i$-de iteratie is $D = D_i$.
+					\item We onderzoeken nu dus de complexiteit van een lijnsegment $s_i$ toe te voegen aan $D_{i-1}$.
+					\item We zoeken eerst de trapezia in de vorige trapeziummap die snijden met het nieuwe lijnsegment. Dit zijn er $k_i$ en deze overlopen (m.b.v. $right(\Delta)$) gebeurt in lineaire tijd: $O(k_i)$. 
+					\item In de tweede stap zullen in $D_{i-1}$ $k_i$ bladeren worden verwijdert en zullen er $k_i$ nieuwe interne knopen en $k_i$ nieuwe bladeren toegevoegd worden. De maximale diepte wijzigt met $3$. 
+					\item Hiermee weten we weinig over de complexiteit van het toevoegen van het segment zelf. Aangezien het algoritme een RIC is (\emph{random incremental construction}, Cfr. Les 4), kunnen we opnieuw gaan kijken naar de \emph{expected} tijdscomplexiteit. 
+					\item We weten dat elk segment evenveel kans had op als laatste toegevoegd te worden (RIC). We  vragen ons nu af hoeveel extra trapezia een lijnsegment kan toevoegen indien het als laatste werd toegevoegd:
+					$$K_i = \sum_{j=1}^{i}[\#\textrm{trapezia aangemaakt als $s_j$ laatst was}]$$
+					Hierbij is $K_i$ de som voor het totaal aantal lijnsegmenten toegevoegd.
+					\item We weten dat elke trapezium kan gemaakt worden door 4 lijnsegmenten: $top(\Delta)$, $bottom(\Delta)$, $right(\Delta)$, $left(\Delta)$.
+					\item Het is ook bewezen dat op iteratie $i$, er maximaal $3i + 1$ trapezia kunnen bestaan na het toevoegen van $i$ lijnsegmenten. We kunnen dus de expressie van daarnet herschrijven naar:
+					$$K_i = \sum_{\Delta \in \tau_i}[\#\textrm{segmenten die $\Delta$ zouden aanmaken}] \leq \sum_{\Delta \in \tau_i}4 = 12i + 4$$
+					\item Het gemiddeld aantal trapezia aangemaakt is dus $\frac{12i + 4}{i} \approx 13$ (voor grote $i$).
+					\item Het verwacht aantal nieuwe eindknopen in de graaf is dus begrensd met 13. Als er $n$ lijnsegmenten zijn bekomen we dus:
+					\item \emph{expected} Ruimtecomplexiteit: $O(13n) = O(n)$
+				\end{enumerate}
+		
+			We leiden nu de tijdscomplexiteit om de structuur op te bouwen af.
+			
+			\subsubsection{Tijdscomplexiteit - Opbouw}
+				\begin{enumerate}
+					\item Deze afleiding is eigenlijk triviaal. We voegen punten toe aan een soort van boom, dus ergens is intuïtief aan te voelen dat dit een logaritmische tijdscomplexiteit zal hebben:
+					\item Tijdscomplexiteit: $O(n log (n))$
+				\end{enumerate}
+		
+			Tot slot bepalen we de tijdscomplexiteit voor een query uit te voeren:
+			
+			\subsubsection{Tijdscomplexiteit - Query}
+				\begin{enumerate}
+					\item We gaan er nog altijd van uit dat we de iteraties zelf bekijken!
+					\item We kunnen ons afvragen hoeveel van de $i$ lijnsegmenten het zoekpad voor een punt langer maken. Een zoekpad wordt enkel langer als de trapezium waartoe $q$ behoort verwijdert en aangepast werd. Er zijn 4 lijnsegmenten die dit kunnen veroorzaken (zie vorige analyse), dus de kans dat dit gebeurt is $\frac{4}{i}$.
+					\item We beschouwen nu opnieuw een som:
+					$$\sum_{i=1}^{n}[\textrm{zoekpad wordt langer dankzij $i$-de toevoeding}] \leq \sum_{i=1}^{n} \frac{4}{i}$$
+					$$= 4 \sum_{i=1}^{n}\frac{1}{i}$$
+					$$\leq 4(1 + log_e(n))$$
+					\item \emph{expected} Tijdscomplexiteit: $O(n log (n))$
+				\end{enumerate}
+			
 \end{document}
