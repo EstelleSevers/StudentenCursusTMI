@@ -295,6 +295,92 @@
 		In les 9 is er geen enkele afleiding voor complexiteit gezien. 
 		
 	\section{Les 10 - Binary Space Partitions}
-	\section{Les 11 - Motion Planning \& Visibility Graphs}
+		In de tiende les zijn de volgende algoritmes besproken:
+		\begin{enumerate}
+			\item Fragmentatie in BSP
+			\item Constructie BSP
+			\item Phase 1 Construction Low-Density BSP
+		\end{enumerate}
+	
+		\subsection{Fragmentatie in BSP}
+			\begin{enumerate}
+				\item We bewijzen dat het \emph{expected} aantal fragmenten gegenereerd door het BSP-algoritme $O(n log (n))$ is. 
+				\item We beginnen met een notie van afstand. Als we segment $s_i$ toevoegen kan het zijn dat een segment $s_j$ 'beschermd' tegen deze splitsing. We definiëren nu de afstand:
+				$$dist_{s_i}(s_j) = \begin{cases}
+					\text{\#segments intersecting $l(s_i)$ tussen $s_i$ en $s_j$ als $l(s_i)$ $s_j$ intersecteerd}\\
+					+\infty \text{ in elk ander geval}
+				\end{cases}$$
+				\item Voor elk eindige afstand zijn er maximaal twee zo'n segmenten met die afstand. Eentje langst beide kanten van $s_i$.
+				\item We berekenen nu de kans dat de splitsing $l(s_i)$ $s_j$ zal snijden:
+				$$P[l(s_i) \text{ snijdt $s_j$}] \leq \frac{1}{dist_{s_i}(s_j) + 2}$$
+				\item Op basis van deze kans berekenen we het aantal snijdingen gegenereerd door $s_i$:
+				$$E[\text{\# snijdingen dankzij $s_i$}] \leq \sum_{j \neq i}\frac{1}{dist_{s_i}(s_j) + 2}$$
+				$$\leq 2\sum_{k = 0}^{n-2}\frac{1}{k + 2}$$
+				$$\leq 2 ln (n)$$
+				\item \emph{expected} aantal fragmenten: $O(2n log (n)) = O(n log (n))$
+				\item De verwachtte grootte van de boom is $O(n + 2n log (n))$ 
+			\end{enumerate}
+	
+		\subsection{Constructie BSP}
+			\begin{enumerate}
+				\item We berekenen de \emph{expected} tijdscomplexiteit om de BSP op te stellen. 
+				\item Voor elke splitsing overlopen we een aantal segmenten/fragmenten in de huidig geconstrueerde boom. Dit zijn er maximaal $O(n)$ (kan alleen kleiner worden).
+				\item Het aantal recursieve oproepen is ook beperkt door het aantal fragmenten $O(n log (n))$. 
+				\item Tijdscomplexiteit: $O(n) * O(n log (n)) = O(n^2 log (n))$
+			\end{enumerate}
 		
+		\subsection{Phase 1 Construction Low-Density BSP}
+			\begin{enumerate}
+				\item We moeten bewijzen dat de eerste fase van het algoritme om een low-density BSP te bekomen $O(\frac{n}{k})$ bladknopen heeft waar elke bladknoop maximaal $k + 4\lambda$ objecten intersecteert.
+				
+				\item Het aantal bladeren is $1 + $ het aantal interne knopen. We definiëren $N(m)$ = het aantal interne knopen voor een BSP boom met $m$ \emph{guards}. Er zijn 4 quadranten met elks $m_i$ guards:
+				$$N(m) = \begin{cases}
+					0 \iff m \leq k\\
+					3 + \sum_{i \in I}N(m_i) \iff \text{ in elk ander geval}
+				\end{cases}$$
+				(\emph{dit is echt een louche stap...})
+				\item We werken uit:
+				$$N(m_i) \leq max(0, \frac{6m}{k} - 3)$$
+				
+				\item Als nu $m \leq k$, dan geldt de stelling: triviaal.
+				\item Als nu $m > k$ moeten we kijken naar welke stap we doen.
+				\item $m > k$ \& Quadtree-Split (2 of meer quadranten $> k$ guards):
+				$$N(m) \leq 3 + \sum_{i \in I}N(m_i) \leq 3 + (\sum_{i \in I}(\frac{6m_i}{k})) - 3card(I) \leq \frac{6m}{k} - 3$$
+				\item $m > k$ \& Krimp-Stap (1 quadrant $< m - k$ en 3 quadranten $< k$): 
+				$$N(m) \leq 3 + N(m - k) \leq 3 + (\frac{6(m - k)}{k - 3}) \leq \frac{6m}{k} - 3$$
+				\item \emph{Dit is gwn letterlijk copy paste ik begrijp dit niet...}
+				\item Wat is nu het aantal mogelijke objecten per bladknoop?
+				\item Een bladknoop bevat maximaal $k$ guards. Dit zijn $k + 4\lambda$ objecten indien de bladknoop een vierkant is in de semi-Quadtree. Dit zijn er maximaal $k + 4\lambda$ in de Quadtree als het een rechthoek is.
+			\end{enumerate}
+		
+	\section{Les 11 - Motion Planning \& Visibility Graphs}
+		In de laatste les zijn de volgende algoritmes besproken:
+		\begin{enumerate}
+			\item Constructie Configuratieruimte bij Puntrobots
+			\item Constructie Minkowski-veelhoek
+			\item Constructie Visibility Graph
+		\end{enumerate}
+	
+		\subsection{Constructie Configuratieruimte bij Puntrobots}
+			\begin{enumerate}
+				\item We stellen de configuratieruimte voor door een trapziummap. Zoals gezien in les 6 is deze construeerbaar in $O(n log (n))$ tijd. 
+				\item We verwijderen de segmenten binnen de objecten. Dit vraagt lineaire tijd $O(n)$.
+				\item Tijdscomplexiteit: $O(n log (n)) + O(n) = O(n log (n))$
+				\item Opmerking 1. Het is mogelijk een roadmap te construeren in lineaire tijd. Hierna is het ook mogelijk om met Breadth-First-Search een pad te zoeken in deze roadmap. We kunnen dus padplanning doen in $O(n)$ mits we de preprocess stap nemen om de trapeziummap en roadmap op te stellen.
+			\end{enumerate}µ
+		\subsection{Minkowski-veelhoek}
+			\begin{enumerate}
+				\item Opmerking 1. De hele afleiding moet niet gekend zijn, enkel intuïtief.
+				\item Twee convexe veelhoeken $P$ en $Q$ met $n$ en $m$ vertices respectievelijk. Het is aan te voelen dat we gebruik makend van het algoritme in de les elke vertex van $P$ en elke vertex van $Q$ éénmaal gebruiken. Dit wordt dus $O(n + m)$.
+				\item Tijdscomplexiteit: $O(n + m)$
+			\end{enumerate}
+		\subsection{Constructie Visibility Graph} 
+			\begin{enumerate}
+				\item Over het algemeen is het opstellen van een visibiliteitsgrafe $O(n^3)$. Dit komt omdat we elk paar van vertices (= $(2n)^2$) gaan testen op intersectie met elke edge van de grafe (= $n$). 
+				\item We kunnen het niet veel beter doen. We krijgen hoogstens één $n$ weggewerkt door een roterende sweepline te gebruiken.
+				\item De roterende sweepline heeft als events de vertices van de graaf en houdt op de status (een BST op operaties in $O(log (n))$ te garandere) de volgorde van intersectie bij. Op deze manier weten we welke edges/vertices de sweepline ziet gegeven een bepaalde rotatie.
+				\item Aangezien alle operaties in de BST $O(log (n))$ zijn en er nog altijd $(2n)^2$ events zijn, zal het opstellen van de visibiliteitsgrafe een tijdscomplexiteit hebben:
+				\item Tijdscomplexiteit $O(n^2 log (n))$. 
+				\item Opmerking 1. Dit is het best dat we kunnen doen.
+			\end{enumerate}
 \end{document}
