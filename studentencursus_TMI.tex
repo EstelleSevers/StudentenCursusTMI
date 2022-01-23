@@ -202,7 +202,7 @@
 	
 	Elk event is begrensd door een tijdscomplexiteit van $O(\log(n))$. De lus zal 2n + k keer uitgevoerd worden, met $n$ het aantal cirkels en $k$ het aantal snijpunten. De lus zal dus  $O(n + k)$ overlopen worden, wat een totaal geeft van $O((n+k)\log(n))$. Qua geheugen zal de status vast zijn door het maximaal aantal elementen dat er op de lijn tevoorschijn kan komen, wat dus $O(n)$ is. De event queue zal begrensd zijn door $2n + k$ events, wat in het ergste geval kan uitkomen op $O(n^2)$. 
 	
-	Een speciaal geval kan twee punten zijn die dezelfde y-waarde hebben, dan kan de event queue het niet juist sorteren. Dit kan opgelost worden door de doorlooplijn zogezegd wat schijner te laten lopen. Een ander probleem is het samenvallen van events (het einde van een lijnstuk is gelijk aan het begin van een ander lijnstuk.) Hier moeten dan tijdens het implementeren bepaalde keuzes gemaakt worden, maar dit kan ook opgelost worden. %TODO moet hier nog iets bij? 
+	Een speciaal geval kan twee punten zijn die dezelfde y-waarde hebben, dan kan de event queue het niet juist sorteren. Dit kan opgelost worden door de doorlooplijn zogezegd wat schuiner te laten lopen. Een ander probleem is het samenvallen van events (het einde van een lijnstuk is gelijk aan het begin van een ander lijnstuk.) Hier moeten dan tijdens het implementeren bepaalde keuzes gemaakt worden, maar dit kan ook opgelost worden. %TODO moet hier nog iets bij? 
 
 
 	\subsection{Doubly-connected edge list}
@@ -270,7 +270,7 @@
 	Dit deel begint met een klein voorbeeld als context. Stel dat je in een museum werkt en moet besluiten waar de bewakers 's nachts zullen staan. Je wilt natuurlijk zo min mogelijk (stilstaande) bewakers voor de ruimte die je moet bewaken. Dit wordt het \textit{Museumprobleem} genoemd. Bij deze probleemstelling komen dan ook de vraag: Wat is het minimaal aantal bewakers dat nodig is voor een n-hoek? Hier wordt dan ook een max over min forumlering gebruikt: Wat is het grootste aantal bewakers dat een veelhoek minimum nodig heeft? Je kan een 12-hoek bijvoorbeeld opdelen met 1 bewaker en met 4 bewakers, het maximum van de minima is hier 4 en dat is wat we dan zoeken. Dit getal schrijven we als $G(n)$ met n het aantal hoeken. Wat vanzelfsprekend is, is dat $G(n) \geq 1$ en dat $G(n) \leq n$ maar dit is te algemeen, we moeten specifieker gaan zoeken. Na een aantal voorbeelden is het duidelijk dat dit getal gelijk is aan $\lfloor n/3\rfloor$. Dit is dus het aantal bewakers dat voor een veelhoek met n hoeken altijd genoeg zal zijn om heel de ruimte te bewaken. 
 	
 	\subsection{Triangulaties}
-	Een triangulatie is het toevoegen van zo veel mogelijk niet snijdende diagonalen in de veelhoek. Een diagonaal is een lijnstuk tussen twee hoekpunten die strikt zichtbaar zijn tegenover elkaar. Zoals je wel al merkt is zo een triangulatie niet uniek, er bestaan er heel veel en er is niet één juiste. Wat we met zekerheid kunnen zeggen is dat elke veelhoek kan getrianguleer worden om uit te komen op $n-2$ driehoeken. We bewijzen die door middel van inductie: 
+	Een triangulatie is het toevoegen van zo veel mogelijk niet snijdende diagonalen in de veelhoek. Een diagonaal is een lijnstuk tussen twee hoekpunten die strikt zichtbaar zijn tegenover elkaar. Zoals je wel al merkt is zo een triangulatie niet uniek, er bestaan er heel veel en er is niet één juiste. Wat we met zekerheid kunnen zeggen is dat elke veelhoek kan getrianguleerd worden om uit te komen op $n-2$ driehoeken. We bewijzen die door middel van inductie: 
 	- $n-3$ : triviaal (1 driehoek wordt getrianguleerd in 1 driehoek).\\
 	- $n > 3$ : 
 	\begin{itemize}
@@ -423,7 +423,7 @@
 	\subsection{Kd-boom}
 	\begin{description}
 		\item[Constructie]:\\
-		Deze structuur is vooral om een interval in 2d te zoeken, er wordt dan afwisselend tussen x- en y-as afgewisseldn om de ruimte verder op te splitsen. De pseudocode om zo'n bomen op te stellen is hieronder te vinden: 
+		Deze structuur is vooral om een interval in 2d te zoeken, er wordt dan afwisselend tussen x- en y-as afgewisseld om de ruimte verder op te splitsen. De pseudocode om zo'n bomen op te stellen is hieronder te vinden: 
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.7\linewidth]{afbeeldingen/kd-bomen/constructie}
@@ -486,7 +486,7 @@
 		\item We kunnen vanaf het punt kijken hoeveel snijpunten deze heeft met de veelhoek, als dit oneven is zal het punt in de veelhoek liggen. En probleem hiermee is wat al men hoekpunten tegenkomen? Dit is een edge case maar is wel heel relevant. 
 		\item Een andere manier is de som te nemen van alle hoeken met alle hoekpunten van de veelhoek. Als de som van deze hoeken 0° is, dan is het punt buiten de veelhoek. Als de som 360° is, dan zit het punt wel in de veelhoek.
 		\item Er is ook een manier om dit te bepalen met de kwadranten van een assenstelsel, waarbij er bijgeteld moet worden of niet bij het veranderen van een kwadrant. 
-		\item Er kan een grid worden geplaatst over de veelhoek, afhankelijk van in wekl vierkantje het punt ligt weten we al op voorhand of het in de veelhoek zit of niet. In de vierkantjes kan ook een zijde van de veelhoek liggen, dan moeten er meer testen volgen. 
+		\item Er kan een grid worden geplaatst over de veelhoek, afhankelijk van in welk vierkantje het punt ligt weten we al op voorhand of het in de veelhoek zit of niet. In de vierkantjes kan ook een zijde van de veelhoek liggen, dan moeten er meer testen volgen. 
 	\end{itemize}
 	
 	\subsection{Vlakverdeling}
@@ -500,7 +500,7 @@
 		\label{fig:lemma}
 	\end{figure}
 	
-	S zal bestaan uit $2n$ vertices, waarbij elke vertex 2 nieuwe vertices kan creëeren. De bounding box zelf bevat nog eens 4 vertices, wat een totaal geeft van $\rightarrow 4 + 2n + 2(2n) = 6n + 4$ vertices. Het links eindpunt van een segment kan een linkerzijde van 2 trapezia definiëren, een rechts eindpunt kan een linkerzijde van 1 trapezium definiëren. R definieerd del linkerzijde van 1 trapezium, diet komt neer op $3n + 1$ trapezia. Twee trapezia die aangrenzend zijn (dus een verticale lijn gemeenschappelijk) hebben altijd een top of bottom gemeenschappelijk. Elk lijnsegment zal in deze structuur verwijzen naar 2 eindpunten en de oorspronkelijke face die boven de edge ligt. Een trapezium kan dus via bottom te weten komen in welke face deze zit. 
+	S zal bestaan uit $2n$ vertices, waarbij elke vertex 2 nieuwe vertices kan creëeren. De bounding box zelf bevat nog eens 4 vertices, wat een totaal geeft van $\rightarrow 4 + 2n + 2(2n) = 6n + 4$ vertices. Het links eindpunt van een segment kan een linkerzijde van 2 trapezia definiëren, een rechts eindpunt kan een linkerzijde van 1 trapezium definiëren. R definieerd de linkerzijde van 1 trapezium, dit komt neer op $3n + 1$ trapezia. Twee trapezia die aangrenzend zijn (dus een verticale lijn gemeenschappelijk) hebben altijd een top of bottom gemeenschappelijk. Elk lijnsegment zal in deze structuur verwijzen naar 2 eindpunten en de oorspronkelijke face die boven de edge ligt. Een trapezium kan dus via bottom te weten komen in welke face deze zit. 
 	
 	De effectieve gegevensstructuur die hiervoor kan gebruikt worden is een gerichte acyclische graaf (DAG). Elk blad is dan een trapezium, de x-knopen zijn de eindpunten van segmenten, deze verwijzen dan naar een lijnsegment (de y-knopen) die dan een boven en onder test hebben die verwijzen naar de trapezia. Het opstellen van deze graaf zal verlopen via een RIC (Randomized Incremental Constitution), zoals in de vorige les gezien. 
 	Er zal dus telkens een nieuw lijnsegment worden toegevoegd en hier zal dus de trapezium map rond aangepast worden. Deze aanpasseingen gaan heel plaatselijk zijn, waardoor het RIC dus heel erg handig is. Het toevoegen van een lijnsegment zal twee stappen ondervinden:  
@@ -573,7 +573,7 @@
 	\subsection{Algoritmes}
 	\begin{description}
 		\item Een eerste manier is om te werken met dat een voronoi-veelhoek gezien kan worden als de doorsnede van $n-1$ halfvlakken. 
-		\item[Incrementeel algoritme]: Telkens een nieuwe site toevoegen aan het voronoi diagramma, er wordt dan met de cirkeleigenschappen bekken welke voronoi-edges opnieuw berekend moeten worden. 
+		\item[Incrementeel algoritme]: Telkens een nieuwe site toevoegen aan het voronoi diagramma, er wordt dan met de cirkeleigenschappen bekeken welke voronoi-edges opnieuw berekend moeten worden. 
 		\item[Verdeel-en-heers algoritme]: Eerst een deel van de sites verwerken en het diagramma opstellen om dan te mergen. 
 		\item[Doorlooplijn]: De doorlooplijn zou over de sites als events lopen en op die manier het diagramma aanpassen, het probleem hierbij is dat een doorlooplijn niets kan aanpassen aan waar die al is langsgeweest. Dit kan een probleem maken aangezien de edges achter de doorlooplijn wel nog kunnen veranderen. 
 		\item[Groeiende cirkels]: De voronoi cellen zijn cirkels die vanuit een site starten om groter te worden en uiteindelijk de voronoi edges te bepalen. Hieronder volgt een visualisatie: 
@@ -603,7 +603,7 @@
 	Het is ook zichtbaar dat de breekpunten (snijpunt tussen twee parabolen) een voronoi-edge bepalen. Voor dit algoritme zullen ook een aantal belangrijke concepten besproken worden: 
 	
 	\begin{description}
-		\item[Status golffront]: Gesorteerde sequentie vqn paraboolsegmenten: Breekpunten knopen, sites bladeren. 
+		\item[Status golffront]: Gesorteerde sequentie van paraboolsegmenten: Breekpunten knopen, sites bladeren. 
 		\item[Event queue]: Doorlooplijn stopt bij een nieuwe voronoi-site en wanneer een breekpunt het einde van een voronoi-edge bereikt. 
 		\item[Site event]: Wanneer de doorlooplijn een site tegenkomt, zal deze een nieuwe parabool toevoegen aan het golffront, dit gaat aanvankelijk een verticale lijn zijn maar zal breder worden naarmate de doorlooplijn vordert. De twee nieuwe breekpunten die deze site veroorzaken zullen op dezelfde locatie starten en dan van mekaar weg bewegen. Voor duidelijkheid volgt een visualisatie: 
 		\begin{figure}[H]
@@ -633,12 +633,12 @@
 		\end{figure}
 		
 	\end{description}
-	De constructie van het voronoit diagramma zal dus bestaan uit een golffront dat uitgebreid wordt als een site bereikt wordt en ingekrompen wordt als een cirkel-event plaatsvindt. 
+	De constructie van het voronoi diagramma zal dus bestaan uit een golffront dat uitgebreid wordt als een site bereikt wordt en ingekrompen wordt als een cirkel-event plaatsvindt. 
 	
 	Voor dit algoritme zullen ook een aantal datastructuren nodig zijn: 
 	\begin{description}
 		\item - Het voronoi-diagramma zal gemaakt worden uit een DCEL. 
-		\item - De event queue moet bestaan uit een gesorteerde lijst site-events. De cirkels moeten gedetecteerd worden voor 3 opeenvolgende paraboolsegmenten. Dit betekent niet dat elk trio een bruikbare cirkel definiëren. Telkens een site-event plaatsvindt zijn er 3 mogelijke nieuwe tio's voor de cirkel: een links, een midden en een rechts. Als dit tripel aanleiding geeft tot een cirkel event wordt dit toegevoegd aan de event queue. 
+		\item - De event queue moet bestaan uit een gesorteerde lijst site-events. De cirkels moeten gedetecteerd worden voor 3 opeenvolgende paraboolsegmenten. Dit betekent niet dat elk trio een bruikbare cirkel definiëren. Telkens een site-event plaatsvindt zijn er 3 mogelijke nieuwe trio's voor de cirkel: een links, een midden en een rechts. Als dit tripel aanleiding geeft tot een cirkel event wordt dit toegevoegd aan de event queue. 
 		\item - Het golffront zelf moet bestaan uit een gebalanceerde zoekboom. Hier zijn de bladeren de paraboolsegementen (van links naar rechts in de boom) en elk blad bevat ook de site waarbij dat segment hoort. De interne knopen van de boom zijn de breekpunten $\rightarrow$ Gegeven een nieuw site-event kunnen we gemakkelijk in $\log(n)$ tijd het paraboolsegment vinden dat boven deze nieuwe site ligt. 
 	\end{description}
 	Hieronder volgt de code voor de constructie nog, met een oproep naar HandleSiteEvent en een oproep naar HandleCircleEvent. 
@@ -690,7 +690,7 @@
 	\begin{itemize}
 		\item Er kunnen geen edges meer toegevoegd worden zonder andere edges te snijden. 
 		\item Veelhoeken kunnen telkens verder gesplitst worden in driehoeken
-		\item De edges van de convex imhullende zijn steeds deel van de triangulatie.
+		\item De edges van de convex omhullende zijn steeds deel van de triangulatie.
 	\end{itemize}
 
 	Deze triangulaties zullen altijd $2n - 2 - k$ driehoeken hebben met $n$ het aantal punten en met $k$ het aantal punten op de convex omhullende. Ze zullen ook altijd $3n - 3 - k$ edges hebben met dezelfde parameters. Het bewijs kan gemakkelijk gevonden worden aan de hand van de formule van Euler. 
@@ -768,7 +768,7 @@
 	
 	
 	\subsection{Interpolerende veeltermcurven}
-	Deze veeltermcurve zal gegeven n+1 punten een curve maken voor de punten p met als parameterwaarde u (gaande van 0 tot n). De curve zal dus afhankelijk zijn van alle punten en een kleine wijziging zal heel de curve aanpassen. Dit is in het algemeen nadelig aangezien de curves plaatselijk aanpassen wel een handige tool is. De curve volt ook de punten niet volledig, het is heel uiteenlopend. Het is duidelijk dat dit niet echt fantastisch is. 
+	Deze veeltermcurve zal gegeven n+1 punten een curve maken voor de punten p met als parameterwaarde u (gaande van 0 tot n). De curve zal dus afhankelijk zijn van alle punten en een kleine wijziging zal heel de curve aanpassen. Dit is in het algemeen nadelig aangezien de curves plaatselijk aanpassen wel een handige tool is. De curve volgt ook de punten niet volledig, het is heel uiteenlopend. Het is duidelijk dat dit niet echt fantastisch is. 
 	
 	
 	\subsection{Lagrange veeltermen}
@@ -791,11 +791,11 @@
 	
 	We kunnen deze curven op 2 manieren interpreteren: 
 	\begin{itemize}
-		\item De curve is een gewogen zom vqn Lagrangeveeltermen met 'vector'-coëfficiënten $\rightarrow$ n-de graads, continu, ...
+		\item De curve is een gewogen som van Lagrangeveeltermen met 'vector'-coëfficiënten $\rightarrow$ n-de graads, continu, ...
 		\item Elk punt op de curve is een affiene combinatie van punten $p_j$ met als gewichten de Lagrange-veeltermen, geëvaueerd in parameterwaarde u, want \(\sum_{k=0}^{n} L_k^n(u) = 1, \forall u \in [u_0, u_n] \)
 	\end{itemize}
 
-	Het voordeel is dat de curve zal interpoleren door de gegeven punten maar anderzijds zal de curve oscilleren tussen interpolatiepunten en dit effect zal ook erger worden bij meer punten. Zoals hierboven gezegd is het curveverloop ook heel gevoelig aan verplaatsingen, waar ook niet wenselijk is. 
+	Het voordeel is dat de curve zal interpoleren door de gegeven punten maar anderzijds zal de curve oscilleren tussen interpolatiepunten en dit effect zal ook erger worden bij meer punten. Zoals hierboven gezegd is het curveverloop ook heel gevoelig aan verplaatsingen, wat ook niet wenselijk is. 
 	
 	
 	\subsection{Béziercurven}
@@ -897,7 +897,7 @@
 		\label{fig:graadverhoging-stelling}
 	\end{figure}
 	%TODO wiskundige slide die ik nu tactisch heb genegeerd B)
-	Als we de graad blijven vehogen, krijgen we controlepunten die conergeten naar de curven en die dus de curve beter en beter beginnen voorstellen. De curve zelf wijzigt niet! Graadverhoging is dus een goede manier om zo'n curve grafisch voor te stellen. De nieuwe controlepunten zullen een combinatie zijn an de buren van die nieuwe controlepunten, bij het toevoegen van zo een punt worden dus enkel 'hoekjs' van de veelhoek afgesneden. 
+	Als we de graad blijven vehogen, krijgen we controlepunten die convergeren naar de curven en die dus de curve beter en beter beginnen voorstellen. De curve zelf wijzigt niet! Graadverhoging is dus een goede manier om zo'n curve grafisch voor te stellen. De nieuwe controlepunten zullen een combinatie zijn an de buren van die nieuwe controlepunten, bij het toevoegen van zo een punt worden dus enkel 'hoekjes' van de veelhoek afgesneden. 
 	Als men (na p graadsverhogingen) een controlepunt zouden veranderen, zou de curve niet meer een n-de graadscurve zijn, maar een 'n+p'-de graadscurve zijn aangezien de curve dan is veranderd. 
 	
 	Hieruit volgt de \textit{Variatie-verminderingseigenschap}: Beschouw een rechte die de controleveelhoek in $k$ punten snijdt. Bij elke graadverhoging zal het aantal snijpunten van de rechte met de nieuwe Bézierveelhoek ofwel gelijk blijven, ofwel dalen. 'oneindig' herhaalde graadverhoging zal voor een veelhoek zorgen die gelijk is aan de curve en het aantal snijpunten van de rechte met de curve zal altijd kleiner zijn dan $k$. 
@@ -918,7 +918,7 @@
 	
 	
 	\subsubsection*{Samengestelde Béziercurven}
-	ZOals je het al hoort uit de naam, is he hier de bedoeling twee curves samen te stellen aan de hand van de controlepunten. De curve kan er vreemd uitzien, hiervoor kunnen we de continuiteit wat aanpassen zodat de curve er zelf eleganter uitziet. Hier zijn ook wat stellingen bij: 
+	Zoals je het al hoort uit de naam, is het hier de bedoeling twee curves samen te stellen aan de hand van de controlepunten. De curve kan er vreemd uitzien, hiervoor kunnen we de continuiteit wat aanpassen zodat de curve er zelf eleganter uitziet. Hier zijn ook wat stellingen bij: 
 	\begin{figure}[H]
 		\centering
 		\subfigure{\includegraphics[width=0.49\textwidth]{afbeeldingen/Beziercurven/continuiteit}} 
@@ -1182,7 +1182,7 @@
 	een doorlooplijn!
 	\\
 	\\
-	Deze keer zal men voor elke vertex een doorlooplijn maken die rondgaat en als event de andere vertice heeft. Indien er een vertex verborgen is voor p, dan is er een edge die de lijn snijdt. De events zijn dan de vertices van S en de status ids dan een binaire boom met alle edges die de doorlooplijn snijdt. Hieronder de pseudocode om $G_{vis}$ op te stellen. 
+	Deze keer zal men voor elke vertex een doorlooplijn maken die rondgaat en als event de andere vertices heeft. Indien er een vertex verborgen is voor p, dan is er een edge die de lijn snijdt. De events zijn dan de vertices van S en de status ids dan een binaire boom met alle edges die de doorlooplijn snijdt. Hieronder de pseudocode om $G_{vis}$ op te stellen. 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.7\linewidth]{afbeeldingen/Motion-plannine/visibleVertices}
